@@ -43,6 +43,10 @@ void Minero::leerEtiquetas(path archivoMp3){
         TagLib::Tag *tag=f.tag();
 
         cout<< "Artista: "<< tag->artist().toCString(true) <<endl;
+        cout<< "Titulo: "<< tag->title().toCString(true) <<endl;
+        cout<< "Álbum: "<< tag->album().toCString(true) <<endl;
+        cout<< "Género: "<< tag->genre().toCString(true) <<endl;
+        cout<< "Año: "<< tag->year()<<endl;
     }else{
         cerr<<"No se pudo leer el archivo o contiene etiquetas"<<endl;
     }
