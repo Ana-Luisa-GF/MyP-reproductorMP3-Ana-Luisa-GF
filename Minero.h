@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
+#include <sqlite3.h>
 
 using namespace std::filesystem;
 using namespace std;
@@ -17,9 +18,13 @@ private:
 
     path entrada; 
     vector<path> archivosMP3;
+    sqlite3* baseDeDatos;
+
+
 
 public:
     
+    void crearBaseDeDatos();
     void ValidarDirectorio(string rEntrada);
     vector<path> getArchivosMP3();
     void leerEtiquetas(path archivoMp3);

@@ -10,12 +10,15 @@
 #include <pwd.h>
 #include <fstream>
 #include <sstream>
+#include <ctime>
 
 
 using namespace std;
 
 void Minero::crearBaseDeDatos(){
     const char *homedir;
+
+    printf("ENTRAMOS AL METODO \n");
 
     if ((homedir = getenv("HOME")) == NULL) {
         homedir = getpwuid(getuid())->pw_dir;
@@ -24,19 +27,21 @@ void Minero::crearBaseDeDatos(){
     path ruta_bd = homedir;
     ruta_bd /= ".local/share/proyec_reproductorMP3";
 
-    if(!exists(ruta_bd) || !is_directory(ruta_bd))
+    std::cout << "Ruta evaluada: " << ruta_bd.string() << std::endl;
+
+    if(!std::filesystem::exists(ruta_bd) || !std::filesystem::is_directory(ruta_bd)){
+          printf("No existe\n");
         if (mkdir(ruta_bd.c_str(), 0755) != 0){
             fprintf(stderr,"Fallo al crear el directorio para la base de datos: %s\n", strerror(errno));
             exit(1);
         } 
+    }
+  
         
     path archivoBD = ruta_bd / "rolas.bd";
     
-    if(exists(archivoBD))
-        return;
+    bool archivoYaExistia = exists(archivoBD);
 
-
-    sqlite3* baseDeDatos;
     int codigo_error = sqlite3_open(archivoBD.c_str(), &baseDeDatos);
 
     if (codigo_error != SQLITE_OK){ 
@@ -44,30 +49,31 @@ void Minero::crearBaseDeDatos(){
         exit(1);
     }
 
-    ifstream archivoSql("rolas.sql");
+    if(!archivoYaExistia){
+        ifstream archivoSql("rolas.sql");
 
-    if (!archivoSql.is_open()) {
-        fprintf(stderr, "No se pudo abrir el archivo rolas.sql para inicializar las tablas.\n");
-        sqlite3_close(baseDeDatos);
-        exit(1);
+        if (!archivoSql.is_open()) {
+            fprintf(stderr, "No se pudo abrir el archivo rolas.sql para inicializar las tablas.\n");
+            sqlite3_close(baseDeDatos);
+            exit(1);
+        }
+
+        std::stringstream buffer;
+        buffer << archivoSql.rdbuf();
+        string consultaSql = buffer.str();
+        archivoSql.close();
+
+        char* mensajeError = nullptr;
+        int mensaje = sqlite3_exec(baseDeDatos, consultaSql.c_str(), 0, 0, &mensajeError);
+
+        if (mensaje != SQLITE_OK) {
+            fprintf(stderr, "Error al crear las tablas: %s\n", mensajeError);
+            sqlite3_free(mensajeError);
+            sqlite3_close(baseDeDatos);
+            exit(1);
+        }
     }
 
-    std::stringstream buffer;
-    buffer << archivoSql.rdbuf();
-    string consultaSql = buffer.str();
-    archivoSql.close();
-
-   char* mensajeError = nullptr;
-    int mensaje = sqlite3_exec(baseDeDatos, consultaSql.c_str(), 0, 0, &mensajeError);
-
-    if (mensaje != SQLITE_OK) {
-        fprintf(stderr, "Error al crear las tablas: %s\n", mensajeError);
-        sqlite3_free(mensajeError);
-        sqlite3_close(baseDeDatos);
-        exit(1);
-    }
-
-    sqlite3_close(baseDeDatos);
 }
 
 void Minero::ValidarDirectorio(string rEntrada){
@@ -106,6 +112,32 @@ void Minero::leerEtiquetas(path archivoMp3){
     if(!f.isNull()&&f.tag()){
         TagLib::Tag *tag=f.tag();
 
+        string artista =  tag->artist().toCString(true);
+        if(artista.empty())
+            artista = "Unknown";
+
+        string titulo =  tag->title().toCString(true);
+        if(titulo.empty())
+            titulo = archivoMp3.stem().string();
+
+
+        string album = tag->album().toCString(true);
+        if(album.empty())
+            album = archivoMp3.parent_path().string();
+
+        string genero = tag->genre().toCString(true);
+         if(genero.empty())
+            genero = "Unknown";
+
+        int anio =  tag->year();
+        if(anio == 0){
+            std::time_t t = std::time(nullptr);
+            std::tm* now = std::localtime(&t);
+            anio = now->tm_year + 1900;
+        }
+
+        
+
         cout<< "Artista: "<< tag->artist().toCString(true) <<endl;
         cout<< "Titulo: "<< tag->title().toCString(true) <<endl;
         cout<< "Álbum: "<< tag->album().toCString(true) <<endl;
@@ -128,6 +160,8 @@ int main(int argc, char* argv[]){
     Minero minero;
     string ruta;
     std::cout<<"El progrma hace las cosas hasta aqui"<<endl;
+
+    minero.crearBaseDeDatos();
 
     if(argc >= 2 ){
         std::cout<<"Hay un directorio"<<endl;
