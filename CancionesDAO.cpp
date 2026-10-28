@@ -22,31 +22,34 @@ CancionesDAO:: ~CancionesDAO(){
 }
 
 void CancionesDAO::crearBaseDeDatos(){
-    const char *homedir;
+    fileSys::path archivoBD;
+    bool archivoYaExistia = false;
 
-    printf("ENTRAMOS AL METODO \n");
+    if(usarRutaTests){
+        archivoBD = ":memory:";
+    }else{
+        const char *homedir;
+        if ((homedir = getenv("HOME")) == NULL) {
+            homedir = getpwuid(getuid())->pw_dir;
+        }
 
-    if ((homedir = getenv("HOME")) == NULL) {
-        homedir = getpwuid(getuid())->pw_dir;
-    }
+        fileSys::path ruta_bd = homedir;
+        ruta_bd /= ".local/share/proyec_reproductorMP3";
 
-    fileSys::path ruta_bd = homedir;
-    ruta_bd /= ".local/share/proyec_reproductorMP3";
+        std::cout << "Ruta evaluada: " << ruta_bd.string() << std::endl;
 
-    std::cout << "Ruta evaluada: " << ruta_bd.string() << std::endl;
-
-    if(!fileSys::exists(ruta_bd) || !fileSys::is_directory(ruta_bd)){
-          printf("No existe\n");
-        if (mkdir(ruta_bd.c_str(), 0755) != 0){
-            fprintf(stderr,"Fallo al crear el directorio para la base de datos: %s\n", strerror(errno));
-            exit(1);
-        } 
-    }
-  
-        
-    fileSys::path archivoBD = ruta_bd / "rolas.bd";
+        if(!fileSys::exists(ruta_bd) || !fileSys::is_directory(ruta_bd)){
+            printf("No existe\n");
+            if (mkdir(ruta_bd.c_str(), 0755) != 0){
+                fprintf(stderr,"Fallo al crear el directorio para la base de datos: %s\n", strerror(errno));
+                exit(1);
+            } 
+        }
     
-    bool archivoYaExistia = fileSys::exists(archivoBD);
+            
+        archivoBD = ruta_bd / "rolas.bd";
+        archivoYaExistia = fileSys::exists(archivoBD);
+    }
 
     int codigo_error = sqlite3_open(archivoBD.c_str(), &baseDeDatos);
 
