@@ -1,10 +1,13 @@
 #ifndef MINERO_H
 #define MINERO_H
 
+#include "Cancion.h"
+#include "CancionesDAO.h"
 #include <string>
 #include <vector>
 #include <filesystem>
-#include <sqlite3.h>
+
+
 
 using namespace std::filesystem;
 using namespace std;
@@ -16,18 +19,16 @@ class Minero{
 
 private:
 
+    CancionesDAO cancionesDAO;
     path entrada; 
-    vector<path> archivosMP3;
-    sqlite3* baseDeDatos;
-
-
+    vector<Cancion> archivosMP3;
 
 public:
     
-    void crearBaseDeDatos();
-    void ValidarDirectorio(string rEntrada);
-    vector<path> getArchivosMP3();
-    void leerEtiquetas(path archivoMp3);
+    Minero(const CancionesDAO& cancionesDAO);
+    void ValidarDirectorio(const string& rEntrada);
+    vector<Cancion> getArchivosMP3();
+    Cancion leerEtiquetas(const path& archivoMp3);
     void recorrerArchivos();
 };
 #endif
