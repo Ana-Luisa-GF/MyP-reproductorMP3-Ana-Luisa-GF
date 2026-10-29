@@ -31,6 +31,8 @@ target_link_libraries(Reproductor PRIVATE
 target_compile_options(Reproductor PRIVATE ${TAGLIB_CFLAGS_OTHER})
 
 #Test.
+
+#Test clase CancionesDAO
 add_executable(test_CancionesDAO 
     ${PROJECT_SOURCE_DIR}/test/test_CancionesDAO.cpp
     ${PROJECT_SOURCE_DIR}/CancionesDAO.cpp
@@ -58,3 +60,35 @@ add_custom_command(
 )
 
 add_dependencies(Reproductor test_CancionesDAO)
+
+#Test clase Minero
+add_executable(test_Minero 
+    ${PROJECT_SOURCE_DIR}/test/test_Minero.cpp
+    ${PROJECT_SOURCE_DIR}/Minero.cpp
+    ${PROJECT_SOURCE_DIR}/CancionesDAO.cpp
+    ${PROJECT_SOURCE_DIR}/Cancion.h
+)
+file(COPY ${PROJECT_SOURCE_DIR}/Musica_tests DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+
+target_include_directories(test_Minero PRIVATE
+    ${PROJECT_SOURCE_DIR}
+    ${SQLITE3_INCLUDE_DIRS}
+    ${TAGLIB_INCLUDE_DIRS}
+)
+
+target_link_libraries(test_Minero PRIVATE 
+    GTest::gtest 
+    GTest::gtest_main 
+    pthread
+    SQLite3::SQLite3  
+    ${TAGLIB_LIBRARIES} 
+)
+
+# Ejecución de los test.
+add_custom_command(
+    TARGET test_Minero POST_BUILD
+    COMMAND $<TARGET_FILE:test_Minero>
+    COMMENT "Ejecutando pruebas de Minero..."
+)
+
+add_dependencies(test_Minero test_CancionesDAO)

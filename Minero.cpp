@@ -62,6 +62,7 @@ Cancion Minero::leerEtiquetas(const path& archivoMp3){
         cout<< "Álbum: "<< tag->album().toCString(true) <<endl;
         cout<< "Género: "<< tag->genre().toCString(true) <<endl;
         cout<< "Año: "<< tag->year()<<endl;
+        cout<< "Track:"<< tag->track()<<endl;
 
         return c;
 
