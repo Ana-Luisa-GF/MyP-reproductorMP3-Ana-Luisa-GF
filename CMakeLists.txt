@@ -30,6 +30,7 @@ add_executable(Reproductor
     ${PROJECT_SOURCE_DIR}/mainwindow.h
     ${PROJECT_SOURCE_DIR}/mainwindow.cpp
     ${PROJECT_SOURCE_DIR}/mainwindow.ui
+    ${PROJECT_SOURCE_DIR}/iconos.qrc
 )
 
 target_include_directories(Reproductor PRIVATE
