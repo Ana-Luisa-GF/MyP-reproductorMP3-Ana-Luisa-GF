@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>24</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMinar">
+    <property name="title">
+     <string/>
+    </property>
+    <addaction name="actionMinar"/>
+   </widget>
+   <widget class="QMenu" name="menumusica">
+    <property name="title">
+     <string/>
+    </property>
+    <addaction name="actionAgregar_Artista"/>
+    <addaction name="actionAgregar_GRupo"/>
+   </widget>
+   <widget class="QMenu" name="menumusica_2">
+    <property name="title">
+     <string/>
+    </property>
+    <addaction name="actionMusica"/>
+    <addaction name="actionAlbums"/>
+    <addaction name="actionPerformers"/>
+   </widget>
+   <addaction name="menuMinar"/>
+   <addaction name="menumusica"/>
+   <addaction name="menumusica_2"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolBar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="actionMinar"/>
+   <addaction name="actionAgregar_Artista"/>
+   <addaction name="actionAgregar_GRupo"/>
+   <addaction name="actionMusica"/>
+   <addaction name="actionAlbums"/>
+   <addaction name="actionPerformers"/>
+  </widget>
+  <action name="actionMinar">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/new/prefix1/pico.png</normaloff>:/new/prefix1/pico.png</iconset>
+   </property>
+   <property name="text">
+    <string>Minar</string>
+   </property>
+  </action>
+  <action name="actionAgregar_Artista">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/new/prefix1/anadir-amigo.png</normaloff>:/new/prefix1/anadir-amigo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Agregar Artista</string>
+   </property>
+  </action>
+  <action name="actionAgregar_GRupo">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/new/prefix1/agregar-grupo.png</normaloff>:/new/prefix1/agregar-grupo.png</iconset>
+   </property>
+   <property name="text">
+    <string>Agregar Grupo</string>
+   </property>
+  </action>
+  <action name="actionMusica">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/new/prefix1/nota-musical.png</normaloff>:/new/prefix1/nota-musical.png</iconset>
+   </property>
+   <property name="text">
+    <string>Musica</string>
+   </property>
+  </action>
+  <action name="actionAlbums">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/new/prefix1/album.png</normaloff>:/new/prefix1/album.png</iconset>
+   </property>
+   <property name="text">
+    <string>Albums</string>
+   </property>
+  </action>
+  <action name="actionPerformers">
+   <property name="icon">
+    <iconset resource="iconos.qrc">
+     <normaloff>:/new/prefix1/artista.png</normaloff>:/new/prefix1/artista.png</iconset>
+   </property>
+   <property name="text">
+    <string>Performers</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="iconos.qrc"/>
+ </resources>
+ <connections/>
+</ui>

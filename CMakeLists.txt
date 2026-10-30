@@ -4,6 +4,15 @@ project(proyecto_reprodutor DESCRIPTION "reproductor MP3 con base de datos e int
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+#======================================================================================
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
+#===========================================================================
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
+
+
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(TAGLIB REQUIRED taglib)
 find_package(SQLite3 REQUIRED)
@@ -16,6 +25,11 @@ add_executable(Reproductor
     ${PROJECT_SOURCE_DIR}/CancionesDAO.cpp
     ${PROJECT_SOURCE_DIR}/CancionesDAO.h
     ${PROJECT_SOURCE_DIR}/Cancion.h
+    ${PROJECT_SOURCE_DIR}/RepControlador.cpp
+
+    ${PROJECT_SOURCE_DIR}/mainwindow.h
+    ${PROJECT_SOURCE_DIR}/mainwindow.cpp
+    ${PROJECT_SOURCE_DIR}/mainwindow.ui
 )
 
 target_include_directories(Reproductor PRIVATE
@@ -24,6 +38,7 @@ target_include_directories(Reproductor PRIVATE
 )
 
 target_link_libraries(Reproductor PRIVATE
+    Qt6::Widgets #===========================================================================
     SQLite3::SQLite3
     ${TAGLIB_LIBRARIES}
 )
