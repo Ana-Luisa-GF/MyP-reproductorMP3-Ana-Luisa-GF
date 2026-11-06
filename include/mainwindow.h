@@ -2,8 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QWidget>
-#include "RepControlador.h"
+
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,7 +15,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(RepControlador *ctrl, QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow() override;
 
 private slots:
@@ -26,6 +25,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    RepControlador *controlador;
+
 };
 #endif // MAINWINDOW_H

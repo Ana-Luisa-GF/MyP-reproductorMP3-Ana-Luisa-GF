@@ -12,24 +12,26 @@ set(CMAKE_AUTORCC ON)
 #===========================================================================
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 
-
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(TAGLIB REQUIRED taglib)
 find_package(SQLite3 REQUIRED)
 find_package(GTest REQUIRED)
 
-add_executable(Reproductor
-    ${PROJECT_SOURCE_DIR}/main.cpp
-    ${PROJECT_SOURCE_DIR}/Minero.cpp
-    ${PROJECT_SOURCE_DIR}/Minero.h
-    ${PROJECT_SOURCE_DIR}/CancionesDAO.cpp
-    ${PROJECT_SOURCE_DIR}/CancionesDAO.h
-    ${PROJECT_SOURCE_DIR}/Cancion.h
-    ${PROJECT_SOURCE_DIR}/RepControlador.cpp
 
-    ${PROJECT_SOURCE_DIR}/mainwindow.h
-    ${PROJECT_SOURCE_DIR}/mainwindow.cpp
-    ${PROJECT_SOURCE_DIR}/mainwindow.ui
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+add_executable(Reproductor
+    ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/src/Minero.cpp
+    ${PROJECT_SOURCE_DIR}/include/Minero.h
+    ${PROJECT_SOURCE_DIR}/src/CancionesDAO.cpp
+    ${PROJECT_SOURCE_DIR}/include/CancionesDAO.h
+    ${PROJECT_SOURCE_DIR}/include/Cancion.h
+    ${PROJECT_SOURCE_DIR}/src/RepControlador.cpp
+    ${PROJECT_SOURCE_DIR}/include/RepControlador.h
+    ${PROJECT_SOURCE_DIR}/include/mainwindow.h
+    ${PROJECT_SOURCE_DIR}/src/mainwindow.cpp
+    ${PROJECT_SOURCE_DIR}/src/mainwindow.ui
     ${PROJECT_SOURCE_DIR}/iconos.qrc
 )
 
@@ -39,72 +41,67 @@ target_include_directories(Reproductor PRIVATE
 )
 
 target_link_libraries(Reproductor PRIVATE
-    Qt6::Widgets #===========================================================================
+    Qt6::Widgets
+#===========================================================================
     SQLite3::SQLite3
     ${TAGLIB_LIBRARIES}
 )
 
 target_compile_options(Reproductor PRIVATE ${TAGLIB_CFLAGS_OTHER})
 
-#Test.
 
-#Test clase CancionesDAO
-add_executable(test_CancionesDAO 
+
+# Test CancionesDAO
+add_executable(test_CancionesDAO
     ${PROJECT_SOURCE_DIR}/test/test_CancionesDAO.cpp
-    ${PROJECT_SOURCE_DIR}/CancionesDAO.cpp
-    ${PROJECT_SOURCE_DIR}/Cancion.h
+    ${PROJECT_SOURCE_DIR}/src/CancionesDAO.cpp
+    ${PROJECT_SOURCE_DIR}/include/Cancion.h
 )
 file(COPY ${PROJECT_SOURCE_DIR}/rolas.sql DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 target_include_directories(test_CancionesDAO PRIVATE
-    ${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/include
     ${SQLITE3_INCLUDE_DIRS}
     ${TAGLIB_INCLUDE_DIRS}
 )
 
-target_link_libraries(test_CancionesDAO PRIVATE 
-    GTest::gtest 
-    GTest::gtest_main 
+target_link_libraries(test_CancionesDAO PRIVATE
+    GTest::gtest
+    GTest::gtest_main
     pthread
-    SQLite3::SQLite3)
-
-# Ejecución de los test.
-add_custom_command(
-    TARGET test_CancionesDAO POST_BUILD
-    COMMAND $<TARGET_FILE:test_CancionesDAO>
-    COMMENT "Ejecutando pruebas de cancionesDAO..."
+    SQLite3::SQLite3
 )
 
-add_dependencies(Reproductor test_CancionesDAO)
 
-#Test clase Minero
-add_executable(test_Minero 
+# Test Minero
+add_executable(test_Minero
     ${PROJECT_SOURCE_DIR}/test/test_Minero.cpp
-    ${PROJECT_SOURCE_DIR}/Minero.cpp
-    ${PROJECT_SOURCE_DIR}/CancionesDAO.cpp
-    ${PROJECT_SOURCE_DIR}/Cancion.h
+    ${PROJECT_SOURCE_DIR}/src/Minero.cpp
+    ${PROJECT_SOURCE_DIR}/src/CancionesDAO.cpp
+    ${PROJECT_SOURCE_DIR}/include/Cancion.h
 )
 file(COPY ${PROJECT_SOURCE_DIR}/Musica_tests DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
 target_include_directories(test_Minero PRIVATE
-    ${PROJECT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/include
     ${SQLITE3_INCLUDE_DIRS}
     ${TAGLIB_INCLUDE_DIRS}
 )
 
-target_link_libraries(test_Minero PRIVATE 
-    GTest::gtest 
-    GTest::gtest_main 
+target_link_libraries(test_Minero PRIVATE
+    GTest::gtest
+    GTest::gtest_main
     pthread
-    SQLite3::SQLite3  
-    ${TAGLIB_LIBRARIES} 
+    SQLite3::SQLite3
+    ${TAGLIB_LIBRARIES}
 )
 
-# Ejecución de los test.
-add_custom_command(
-    TARGET test_Minero POST_BUILD
-    COMMAND $<TARGET_FILE:test_Minero>
-    COMMENT "Ejecutando pruebas de Minero..."
+
+add_custom_target(correr_todas_las_pruebas ALL
+    COMMAND $<TARGET_FILE:test_CancionesDAO> --gtest_color=yes
+    COMMAND $<TARGET_FILE:test_Minero> --gtest_color=yes
+    DEPENDS test_CancionesDAO test_Minero
+    COMMENT "--- Ejecutando pruebas unitarias ---"
 )
 
-add_dependencies(test_Minero test_CancionesDAO)
+add_dependencies(Reproductor correr_todas_las_pruebas)

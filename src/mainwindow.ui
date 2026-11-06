@@ -68,8 +68,8 @@
   </widget>
   <action name="actionMinar">
    <property name="icon">
-    <iconset resource="iconos.qrc">
-     <normaloff>:/new/prefix1/pico.png</normaloff>:/new/prefix1/pico.png</iconset>
+    <iconset resource="../iconos.qrc">
+     <normaloff>:/iconos/pico.png</normaloff>:/iconos/pico.png</iconset>
    </property>
    <property name="text">
     <string>Minar</string>
@@ -77,8 +77,8 @@
   </action>
   <action name="actionAgregar_Artista">
    <property name="icon">
-    <iconset resource="iconos.qrc">
-     <normaloff>:/new/prefix1/anadir-amigo.png</normaloff>:/new/prefix1/anadir-amigo.png</iconset>
+    <iconset resource="../iconos.qrc">
+     <normaloff>:/iconos/anadir-amigo.png</normaloff>:/iconos/anadir-amigo.png</iconset>
    </property>
    <property name="text">
     <string>Agregar Artista</string>
@@ -86,8 +86,8 @@
   </action>
   <action name="actionAgregar_GRupo">
    <property name="icon">
-    <iconset resource="iconos.qrc">
-     <normaloff>:/new/prefix1/agregar-grupo.png</normaloff>:/new/prefix1/agregar-grupo.png</iconset>
+    <iconset resource="../iconos.qrc">
+     <normaloff>:/iconos/agregar-grupo.png</normaloff>:/iconos/agregar-grupo.png</iconset>
    </property>
    <property name="text">
     <string>Agregar Grupo</string>
@@ -95,8 +95,8 @@
   </action>
   <action name="actionMusica">
    <property name="icon">
-    <iconset resource="iconos.qrc">
-     <normaloff>:/new/prefix1/nota-musical.png</normaloff>:/new/prefix1/nota-musical.png</iconset>
+    <iconset resource="../iconos.qrc">
+     <normaloff>:/iconos/nota-musical.png</normaloff>:/iconos/nota-musical.png</iconset>
    </property>
    <property name="text">
     <string>Musica</string>
@@ -104,8 +104,8 @@
   </action>
   <action name="actionAlbums">
    <property name="icon">
-    <iconset resource="iconos.qrc">
-     <normaloff>:/new/prefix1/album.png</normaloff>:/new/prefix1/album.png</iconset>
+    <iconset resource="../iconos.qrc">
+     <normaloff>:/iconos/album.png</normaloff>:/iconos/album.png</iconset>
    </property>
    <property name="text">
     <string>Albums</string>
@@ -113,8 +113,8 @@
   </action>
   <action name="actionPerformers">
    <property name="icon">
-    <iconset resource="iconos.qrc">
-     <normaloff>:/new/prefix1/artista.png</normaloff>:/new/prefix1/artista.png</iconset>
+    <iconset resource="../iconos.qrc">
+     <normaloff>:/iconos/artista.png</normaloff>:/iconos/artista.png</iconset>
    </property>
    <property name="text">
     <string>Performers</string>
@@ -122,7 +122,7 @@
   </action>
  </widget>
  <resources>
-  <include location="iconos.qrc"/>
+  <include location="../iconos.qrc"/>
  </resources>
  <connections/>
 </ui>

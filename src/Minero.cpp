@@ -57,12 +57,12 @@ Cancion Minero::leerEtiquetas(const path& archivoMp3){
         Cancion c (archivoMp3,  tag->title().toCString(true), tag->artist().toCString(true), 
                 tag->genre().toCString(true), tag->album().toCString(true), tag->track(), tag->year());
 
-        cout<< "Artista: "<< tag->artist().toCString(true) <<endl;
-        cout<< "Titulo: "<< tag->title().toCString(true) <<endl;
-        cout<< "Álbum: "<< tag->album().toCString(true) <<endl;
-        cout<< "Género: "<< tag->genre().toCString(true) <<endl;
-        cout<< "Año: "<< tag->year()<<endl;
-        cout<< "Track:"<< tag->track()<<endl;
+        //cout<< "Artista: "<< tag->artist().toCString(true) <<endl;
+        //cout<< "Titulo: "<< tag->title().toCString(true) <<endl;
+        //cout<< "Álbum: "<< tag->album().toCString(true) <<endl;
+        //cout<< "Género: "<< tag->genre().toCString(true) <<endl;
+        //cout<< "Año: "<< tag->year()<<endl;
+        //cout<< "Track:"<< tag->track()<<endl;
 
         return c;
 
