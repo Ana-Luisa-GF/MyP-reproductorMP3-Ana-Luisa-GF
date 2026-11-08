@@ -6,8 +6,7 @@
 #include <string>
 #include <vector>
 #include <filesystem>
-
-
+#include <taglib/fileref.h>
 
 using namespace std::filesystem;
 using namespace std;
@@ -20,15 +19,16 @@ class Minero{
 private:
 
     CancionesDAO cancionesDAO;
-    path entrada; 
+    std::filesystem::path entrada;
     vector<Cancion> archivosMP3;
 
 public:
     
     Minero(const CancionesDAO& cancionesDAO);
-    void ValidarDirectorio(const string& rEntrada);
+    bool ValidarDirectorio(const string& rEntrada);
     vector<Cancion> getArchivosMP3();
     Cancion leerEtiquetas(const path& archivoMp3);
     void recorrerArchivos();
+    path guardarImagen(const TagLib::ByteVector& datosImagen, path rutaCancion);
 };
 #endif

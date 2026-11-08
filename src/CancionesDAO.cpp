@@ -39,7 +39,6 @@ void CancionesDAO::crearBaseDeDatos(){
         std::cout << "Ruta evaluada: " << ruta_bd.string() << std::endl;
 
         if(!fileSys::exists(ruta_bd) || !fileSys::is_directory(ruta_bd)){
-            printf("No existe\n");
             if (mkdir(ruta_bd.c_str(), 0755) != 0){
                 fprintf(stderr,"Fallo al crear el directorio para la base de datos: %s\n", strerror(errno));
                 exit(1);
@@ -81,6 +80,17 @@ void CancionesDAO::crearBaseDeDatos(){
             sqlite3_close(baseDeDatos);
             exit(1);
         }
+
+        mensajeError = nullptr;
+        consultaSql = "ALTER TABLE rolas ADD COLUMN portada TEXT;";
+        mensaje = sqlite3_exec(baseDeDatos, consultaSql.c_str(), 0, 0, &mensajeError);
+
+        if (mensaje != SQLITE_OK) {
+            fprintf(stderr, "Error al crear las tablas: %s\n", mensajeError);
+            sqlite3_free(mensajeError);
+            sqlite3_close(baseDeDatos);
+            exit(1);
+        }
     }
 
 }
@@ -88,7 +98,7 @@ void CancionesDAO::crearBaseDeDatos(){
 
 void CancionesDAO::agregarCanciones(const std::vector<Cancion>& listCanciones){
     string peticion1 = "INSERT OR IGNORE INTO rolas (id_performer, id_album, path, " 
-                       "title, track, year, genre) VALUES (?, ?, ?, ?, ?, ?, ?);";
+                       "title, track, year, genre, portada) VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
     sqlite3_stmt* stmtInsert = nullptr;
 
     if (sqlite3_prepare_v2(baseDeDatos, peticion1.c_str(), -1, &stmtInsert, nullptr) != SQLITE_OK)
@@ -127,6 +137,7 @@ void CancionesDAO::agregarCanciones(const std::vector<Cancion>& listCanciones){
         sqlite3_bind_int(stmtInsert, 5, cancion.track);
         sqlite3_bind_int(stmtInsert, 6, cancion.anio);
         sqlite3_bind_text(stmtInsert, 7, cancion.genero.c_str(), -1, SQLITE_TRANSIENT);
+        sqlite3_bind_text(stmtInsert, 8, cancion.portada.string().c_str(), -1, SQLITE_TRANSIENT);
 
         if (sqlite3_step(stmtInsert) != SQLITE_DONE)
             fprintf(stderr, "Error al insertar la canción: %s\n", sqlite3_errmsg(baseDeDatos));
@@ -221,3 +232,42 @@ int CancionesDAO::agregarAlbun(std::filesystem::path ruta, std::string nombre){
     return id_album;
 }
 
+
+std::vector<Cancion> CancionesDAO::getCanciones(){
+    vector<Cancion> rolas;
+    std::string peticion = "SELECT r.path, r.title, r.track, r.year, r.genre, r.portada, p.name, a.name "
+                           "FROM rolas r "
+                           "JOIN performers p ON r.id_performer = p.id_performer "
+                           "JOIN albums a ON r.id_album = a.id_album;";
+
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return rolas;
+
+    while(sqlite3_step(stmtSelect) == SQLITE_ROW){
+        const unsigned char* c_ruta = sqlite3_column_text(stmtSelect, 0);
+        std::string ruta = c_ruta ? reinterpret_cast<const char*>(c_ruta) : "";
+
+        const unsigned char* c_titulo = sqlite3_column_text(stmtSelect, 1);
+        std::string titulo = c_titulo ? reinterpret_cast<const char*>(c_titulo) : "";
+
+        int track = sqlite3_column_int(stmtSelect, 2);
+        int anio = sqlite3_column_int(stmtSelect, 3);
+
+        const unsigned char* c_genero = sqlite3_column_text(stmtSelect, 4);
+        std::string genero = c_genero ? reinterpret_cast<const char*>(c_genero) : "";
+
+        const unsigned char* c_portada = sqlite3_column_text(stmtSelect, 5);
+        std::string portada = c_portada ? reinterpret_cast<const char*>(c_portada) : "";
+
+        const unsigned char* c_artista = sqlite3_column_text(stmtSelect, 6);
+        std::string artista = c_artista ? reinterpret_cast<const char*>(c_artista) : "Unknown";
+
+        const unsigned char* c_album = sqlite3_column_text(stmtSelect, 7);
+        std::string album = c_album ? reinterpret_cast<const char*>(c_album) : "Unknown";
+
+        Cancion c(ruta,titulo,artista,genero,album,track,anio,portada);
+        rolas.push_back(c);
+    }
+    return rolas;
+}

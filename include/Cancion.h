@@ -14,9 +14,11 @@ struct Cancion{
     std::string album;
     int track;
     int anio;
+    std::filesystem::path portada;
 
     Cancion(const std::filesystem::path& ruta, const std::string& titulo, const std::string& artista, 
-            const std::string& genero, const std::string& album, const int& track, const int& anio){
+            const std::string& genero, const std::string& album, const int& track, const int& anio,
+            const std::filesystem::path& portada){
 
         this->ruta = ruta;
         this->track = track;
@@ -25,6 +27,7 @@ struct Cancion{
         this->album = (album.empty())? ruta.parent_path().string() : album;
         this->genero = (genero.empty())? "Unknown" : genero;
         this->anio = (anio == 0)? 2026 : anio;
+        this->portada = portada;
 
     }
 };
