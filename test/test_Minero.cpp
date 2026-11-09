@@ -9,8 +9,8 @@ TEST(Minero_Test, ValidacionDeDirectorio) {
     CancionesDAO cancionesDAO(true);
     Minero minero(cancionesDAO);
 
-    EXPECT_DEATH(minero.ValidarDirectorio("/ruta/que//no/existe_145"), ".*");
-    EXPECT_DEATH(minero.ValidarDirectorio("rolas.sql"), ".*");
+    EXPECT_FALSE(minero.ValidarDirectorio("/ruta/que//no/existe_145"));
+    EXPECT_FALSE(minero.ValidarDirectorio("rolas.sql"));
     minero.ValidarDirectorio("Musica_tests");
 }
 
@@ -21,9 +21,8 @@ TEST(Minero_Test, Leer_Etiquetas){
     Minero minero(cancionesDAO);
 
     fileSys::path ruta = "Musica_tests/demo.mp3";
-    Cancion c1(ruta,"T","A","Jazz","L",3,1950);
+    Cancion c1(ruta,"T","A","Jazz","L",3,1950,"");
     Cancion c2 = minero.leerEtiquetas(ruta);
-
     EXPECT_EQ(c1.ruta.string(), c2.ruta.string());
     EXPECT_EQ(c1.titulo, c2.titulo);
     EXPECT_EQ(c1.artista, c2.artista);
