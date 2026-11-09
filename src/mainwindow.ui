@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>842</width>
-    <height>407</height>
+    <width>1099</width>
+    <height>646</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <widget class="QFrame" name="reprod">
     <property name="geometry">
      <rect>
-      <x>20</x>
+      <x>10</x>
       <y>10</y>
-      <width>231</width>
-      <height>311</height>
+      <width>321</width>
+      <height>541</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -37,10 +37,10 @@ border-radius: 10px;</string>
     <widget class="QLabel" name="pantalla">
      <property name="geometry">
       <rect>
-       <x>30</x>
+       <x>40</x>
        <y>20</y>
-       <width>170</width>
-       <height>170</height>
+       <width>231</width>
+       <height>161</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -51,14 +51,478 @@ ui-&gt;label-&gt;setStyleSheet(&quot;background-color: yellow;&quot;);</string>
       <string/>
      </property>
     </widget>
+    <widget class="QPushButton" name="botonPlay">
+     <property name="geometry">
+      <rect>
+       <x>120</x>
+       <y>188</y>
+       <width>70</width>
+       <height>70</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    width: 70px;
+    height: 70px;
+    border-radius: 35px;
+    
+    border: 1px solid #8f8f91;
+    background-color: #f6f6f6;
+    padding: 5px; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:checked {
+    background-color: #e0e0e0; 
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../iconos.qrc">
+       <normaloff>:/iconos/boton-de-reproduccion.png</normaloff>
+       <normalon>:/iconos/boton-de-pausa(1).png</normalon>:/iconos/boton-de-reproduccion.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>69</width>
+       <height>69</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="botonRegresar">
+     <property name="geometry">
+      <rect>
+       <x>60</x>
+       <y>198</y>
+       <width>50</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border-radius: 25px;
+	border: 1px solid #8f8f91;
+	background-color: #f6f6f6;
+	padding: 5px; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../iconos.qrc">
+       <normaloff>:/iconos/anterior.png</normaloff>:/iconos/anterior.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>45</width>
+       <height>45</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="botonAdelantar">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>200</y>
+       <width>50</width>
+       <height>50</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border-radius: 25px;
+	border: 1px solid #8f8f91;
+	background-color: #f6f6f6;
+	padding: 5px; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../iconos.qrc">
+       <normaloff>:/iconos/siguiente-boton.png</normaloff>:/iconos/siguiente-boton.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>45</width>
+       <height>45</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QLabel" name="caja_titulo">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>264</y>
+       <width>259</width>
+       <height>49</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+     </property>
+     <property name="text">
+      <string>&lt;span style=&quot;color: #b0b0b0; font-size: 10pt;&quot;&gt;Título: &lt;/span&gt;&lt;span style=&quot;color: #ff</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="caja_artista">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>319</y>
+       <width>259</width>
+       <height>49</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+     </property>
+     <property name="text">
+      <string>&lt;span style=&quot;color: #b0b0b0; font-size: 10pt;&quot;&gt;Artista: &lt;/span&gt;&lt;span style=&quot;color: #ff</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="caja_genero">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>427</y>
+       <width>259</width>
+       <height>49</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Género: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="caja_album">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>373</y>
+       <width>259</width>
+       <height>49</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+     </property>
+     <property name="text">
+      <string>&lt;span style=&quot;color: #b0b0b0; font-size: 10pt;&quot;&gt;Album:&lt;/span&gt;&lt;span style=&quot;color: #ff</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="editButton_artista">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>330</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border-radius: 15px;
+	border: 1px solid #8f8f91;
+	background-color: #f6f6f6;
+	padding: 5px; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../iconos.qrc">
+       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>29</width>
+       <height>29</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="editButton_album">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>383</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border-radius: 15px;
+	border: 1px solid #8f8f91;
+	background-color: #f6f6f6;
+	padding: 5px; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../iconos.qrc">
+       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>29</width>
+       <height>29</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="editButton_4">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>437</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border-radius: 15px;
+	border: 1px solid #8f8f91;
+	background-color: #f6f6f6;
+	padding: 5px; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../iconos.qrc">
+       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>29</width>
+       <height>29</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="editButton_5">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>491</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border-radius: 15px;
+	border: 1px solid #8f8f91;
+	background-color: #f6f6f6;
+	padding: 5px; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../iconos.qrc">
+       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>29</width>
+       <height>29</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="caja_anio">
+     <property name="geometry">
+      <rect>
+       <x>11</x>
+       <y>481</y>
+       <width>259</width>
+       <height>49</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Año: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="editButton_artista_2">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>274</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border-radius: 15px;
+	border: 1px solid #8f8f91;
+	background-color: #f6f6f6;
+	padding: 5px; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../iconos.qrc">
+       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>29</width>
+       <height>29</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
    </widget>
    <widget class="QListWidget" name="listWidget">
     <property name="geometry">
      <rect>
-      <x>260</x>
+      <x>350</x>
       <y>10</y>
-      <width>571</width>
-      <height>311</height>
+      <width>741</width>
+      <height>541</height>
      </rect>
     </property>
    </widget>
@@ -68,7 +532,7 @@ ui-&gt;label-&gt;setStyleSheet(&quot;background-color: yellow;&quot;);</string>
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>842</width>
+     <width>1099</width>
      <height>24</height>
     </rect>
    </property>

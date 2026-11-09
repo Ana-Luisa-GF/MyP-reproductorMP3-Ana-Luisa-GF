@@ -12,7 +12,17 @@ MainWindow::MainWindow(RepControlador *ctrl, QWidget *parent)
 
     QLineEdit *barraBusqueda = new QLineEdit(this);
     barraBusqueda->setPlaceholderText("Buscar...");
+    barraBusqueda->setFixedSize(750, 35);
+    barraBusqueda->setStyleSheet(
+        "QLineEdit {"
+        "   font-size: 14px;"
+        "   padding-left: 8px;"
+        "   border-radius: 5px;"
+        "   border: 1px solid #ccc;"
+        "}"
+        );
     ui->mainToolBar->addWidget(barraBusqueda);
+    ui->mainToolBar->setIconSize(QSize(45, 45));
 }
 
 MainWindow::~MainWindow()
@@ -39,7 +49,7 @@ void MainWindow::cargarListaCanciones(std::vector<Cancion> rolas){
     ui->listWidget->setViewMode(QListWidget::IconMode);
     ui->listWidget->setResizeMode(QListWidget::Adjust);
     ui->listWidget->setGridSize(QSize(180, 180));
-    ui->listWidget->setWordWrap(true); //-----
+    ui->listWidget->setWordWrap(true);
 
     for (const Cancion& cancion : rolas) {
         QListWidgetItem* item = new QListWidgetItem(ui->listWidget);
@@ -50,47 +60,71 @@ void MainWindow::cargarListaCanciones(std::vector<Cancion> rolas){
         item->setSizeHint(tarjeta->sizeHint());
         ui->listWidget->setItemWidget(item, tarjeta);
         connect(tarjeta, &TarjetaCancion::click, this, [this, cancion](const std::string &titulo) {
-            this->cancionClickeada(cancion.portada);
+            this->cancionClickeada(cancion);
         });
     }
-
-  /*  QWidget* contenedor = ui->scrollArea->widget();
-    QVBoxLayout* layoutScroll = qobject_cast<QVBoxLayout*>(contenedor->layout());
-    if (!layoutScroll) {
-        layoutScroll = new QVBoxLayout(contenedor);
-        contenedor->setLayout(layoutScroll);
-    }
-
-    QLayoutItem* item;
-    while ((item = layoutScroll->takeAt(0)) != nullptr) {
-        delete item->widget();
-        delete item;
-    }
-
-    for (const Cancion& cancion : rolas) {
-        TarjetaCancion* tarjeta = new TarjetaCancion(contenedor);
-
-        tarjeta->establecerDatos(cancion.titulo, cancion.portada);
-
-
-        connect(tarjeta, &TarjetaCancion::click, this, &MainWindow::cancionClickeada);
-
-        layoutScroll->addWidget(tarjeta);
-    }
-    layoutScroll->addStretch();*/
 }
 
 
-void MainWindow::cancionClickeada(const std::filesystem::path& portada)
+void MainWindow::cancionClickeada(const Cancion& cancion)
 {
     qDebug() << "¡Se hizo clic en una canción!";
-    QString rutaQt = QString::fromStdString(portada.string());
+    QString rutaQt = QString::fromStdString(cancion.portada.string());
 
     if (!rutaQt.isEmpty() && QFile::exists(rutaQt)) {
         QPixmap pixmap(rutaQt);
-        ui->pantalla->setPixmap(pixmap.scaled(ui->pantalla->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        //ui->pantalla->setPixmap(pixmap.scaled(ui->pantalla->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        ui->pantalla->setPixmap(pixmap.scaled(ui->pantalla->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
     } else {
         QPixmap pixmapDefault(":/iconos/letras-de-canciones.png");
-        ui->pantalla->setPixmap(pixmapDefault.scaled(ui->pantalla->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        //ui->pantalla->setPixmap(pixmapDefault.scaled(ui->pantalla->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        ui->pantalla->setPixmap(pixmapDefault.scaled(ui->pantalla->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     }
+
+    int anchoDisponible = 261 - 75;
+
+    QFontMetrics metrics1(ui->caja_titulo->font());
+    QString titulo = QString::fromStdString(cancion.titulo);
+    QString titulo_cortado = metrics1.elidedText(titulo, Qt::ElideRight, anchoDisponible);
+
+    ui->caja_titulo->setText(
+        "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Título: </span>"
+        "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + titulo_cortado + "</span>"
+        );
+
+    QFontMetrics metrics2(ui->caja_album->font());
+    QString album = QString::fromStdString(cancion.album);
+    QString album_cortado = metrics2.elidedText(album, Qt::ElideRight, anchoDisponible);
+
+    ui->caja_album->setText(
+        "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Album: </span>"
+        "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + album_cortado + "</span>"
+        );
+
+    QFontMetrics metrics3(ui->caja_genero->font());
+    QString genero = QString::fromStdString(cancion.genero);
+    QString genero_cortado = metrics3.elidedText(genero, Qt::ElideRight, anchoDisponible);
+    ui->caja_genero->setText(
+        "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Genero: </span>"
+        "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + genero_cortado+ "</span>"
+        );
+
+    std::string texto1 = "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Año: </span>  <span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>";
+
+    std::string texto2 = texto1+std::to_string(cancion.anio)+"</span>";
+    ui->caja_anio->setText(texto2.c_str());
+
+
+
+    QFontMetrics metrics4(ui->caja_artista->font());
+    QString artista = QString::fromStdString(cancion.artista);
+    QString artista_cortado = metrics4.elidedText(artista, Qt::ElideRight, anchoDisponible);
+    ui->caja_artista->setText(
+        "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Artista: </span>"
+        "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + artista_cortado+ "</span>"
+        );
+
+
+
 }

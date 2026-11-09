@@ -6,11 +6,12 @@ TarjetaCancion::TarjetaCancion(QWidget *parent) : QFrame(parent) {
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     labelPortada = new QLabel(this);
-    labelPortada->setFixedSize(178, 178);
+    labelPortada->setFixedSize(168, 168);
     labelPortada->setScaledContents(true);
 
     labelTitulo = new QLabel(this);
     labelTitulo->setAlignment(Qt::AlignCenter);
+    labelTitulo->setWordWrap(true);
 
     layout->addWidget(labelPortada);
     layout->addWidget(labelTitulo);
@@ -36,10 +37,13 @@ void TarjetaCancion::establecerDatos(const std::string& titulo, const std::files
 
     if (!rutaQt.isEmpty() && QFile::exists(rutaQt)) {
         QPixmap pixmap(rutaQt);
-        labelPortada->setPixmap(pixmap.scaled(labelPortada->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+       // labelPortada->setPixmap(pixmap.scaled(labelPortada->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        labelPortada->setPixmap(pixmap.scaled(labelPortada->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     } else {
         QPixmap pixmapDefault(":/iconos/letras-de-canciones.png");
-        labelPortada->setPixmap(pixmapDefault.scaled(labelPortada->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        //labelPortada->setPixmap(pixmapDefault.scaled(labelPortada->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        labelPortada->setPixmap(pixmapDefault.scaled(labelPortada->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
     }
 
     /*QString rutaQt = QString::fromStdString(portada.string());

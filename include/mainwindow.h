@@ -27,7 +27,7 @@ private slots:
 
     void on_actionMinar_triggered();
 
-    void cancionClickeada(const std::filesystem::path& portada);
+    void cancionClickeada(const Cancion& cancion);
 
 private:
     Ui::MainWindow *ui;
