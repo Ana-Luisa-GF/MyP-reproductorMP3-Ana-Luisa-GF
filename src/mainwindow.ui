@@ -11,7 +11,14 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Reproductor de música</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../iconos.qrc">
+    <normaloff>:/iconos/musica.png</normaloff>:/iconos/musica.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QFrame" name="reprod">
@@ -361,7 +368,7 @@ QPushButton:pressed {
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="editButton_4">
+    <widget class="QPushButton" name="editButton_genero">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -405,7 +412,7 @@ QPushButton:pressed {
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="editButton_5">
+    <widget class="QPushButton" name="editButton_anio">
      <property name="geometry">
       <rect>
        <x>280</x>
@@ -471,7 +478,7 @@ QPushButton:pressed {
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Año: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="editButton_artista_2">
+    <widget class="QPushButton" name="editButton_titulo">
      <property name="geometry">
       <rect>
        <x>280</x>

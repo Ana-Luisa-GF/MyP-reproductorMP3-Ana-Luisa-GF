@@ -32,6 +32,9 @@ add_executable(Reproductor
     ${PROJECT_SOURCE_DIR}/iconos.qrc
     ${PROJECT_SOURCE_DIR}/include/TarjetaCancion.h
     ${PROJECT_SOURCE_DIR}/src/TarjetaCancion.cpp
+    ${PROJECT_SOURCE_DIR}/src/cambiartitulo.cpp
+    ${PROJECT_SOURCE_DIR}/src/cambiartitulo.ui
+    ${PROJECT_SOURCE_DIR}/include/cambiartitulo.h
 )
 
 target_include_directories(Reproductor PRIVATE

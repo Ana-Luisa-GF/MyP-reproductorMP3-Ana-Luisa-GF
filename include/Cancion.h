@@ -30,6 +30,8 @@ struct Cancion{
         this->portada = portada;
 
     }
+
+    Cancion(){};
 };
 #endif
 

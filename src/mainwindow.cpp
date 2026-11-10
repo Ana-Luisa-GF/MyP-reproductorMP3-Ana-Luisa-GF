@@ -2,6 +2,7 @@
 #include "./ui_mainwindow.h"
 #include <QInputDialog>
 #include "TarjetaCancion.h"
+#include "cambiartitulo.h"
 
 MainWindow::MainWindow(RepControlador *ctrl, QWidget *parent)
     : QMainWindow(parent)
@@ -45,7 +46,7 @@ void MainWindow::on_actionMinar_triggered()
 
 
 void MainWindow::cargarListaCanciones(std::vector<Cancion> rolas){
-
+    ui->listWidget->clear();
     ui->listWidget->setViewMode(QListWidget::IconMode);
     ui->listWidget->setResizeMode(QListWidget::Adjust);
     ui->listWidget->setGridSize(QSize(180, 180));
@@ -68,6 +69,7 @@ void MainWindow::cargarListaCanciones(std::vector<Cancion> rolas){
 
 void MainWindow::cancionClickeada(const Cancion& cancion)
 {
+    cancion_selec = cancion;
     qDebug() << "¡Se hizo clic en una canción!";
     QString rutaQt = QString::fromStdString(cancion.portada.string());
 
@@ -128,3 +130,66 @@ void MainWindow::cancionClickeada(const Cancion& cancion)
 
 
 }
+
+void MainWindow::on_editButton_titulo_clicked()
+{
+    QString mensaje="";
+    if(!cancion_selec.ruta.empty())
+        mensaje =  QString::fromStdString(cancion_selec.titulo);
+
+    CambiarTitulo ventana_titulo("Titulo de la canción",mensaje);
+    ventana_titulo.setModal(true);
+    ventana_titulo.exec();
+}
+
+
+void MainWindow::on_editButton_artista_clicked()
+{
+    QString mensaje="";
+    if(!cancion_selec.ruta.empty())
+        mensaje =  QString::fromStdString(cancion_selec.artista);
+
+    CambiarTitulo ventana_titulo("Artista de la canción",mensaje);
+    ventana_titulo.setModal(true);
+    ventana_titulo.exec();
+}
+
+
+void MainWindow::on_editButton_album_clicked()
+{
+    QString mensaje="";
+    if(!cancion_selec.ruta.empty())
+        mensaje =  QString::fromStdString(cancion_selec.album);
+
+    CambiarTitulo ventana_titulo("Album de la canción",mensaje);
+    ventana_titulo.setModal(true);
+    ventana_titulo.exec();
+}
+
+
+void MainWindow::on_editButton_genero_clicked()
+{
+    QString mensaje="";
+    if(!cancion_selec.ruta.empty())
+        mensaje =  QString::fromStdString(cancion_selec.genero);
+
+    CambiarTitulo ventana_titulo("Género de la canción",mensaje);
+    ventana_titulo.setModal(true);
+
+    if(ventana_titulo.exec() == QDialog::Accepted)
+        qDebug() << "El diálogo retornó:" << ventana_titulo.getResultado();
+}
+
+
+
+void MainWindow::on_editButton_anio_clicked()
+{
+    QString mensaje="";
+    if(!cancion_selec.ruta.empty())
+        mensaje =  QString::number(cancion_selec.anio);
+
+    CambiarTitulo ventana_titulo("Año de la canción",mensaje);
+    ventana_titulo.setModal(true);
+    ventana_titulo.exec();
+}
+

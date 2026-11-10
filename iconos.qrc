@@ -11,6 +11,7 @@
         <file>iconos/pico.png</file>
         <file>iconos/siguiente-boton.png</file>
         <file>iconos/letras-de-canciones.png</file>
-	<file>iconos/boligrafo.png</file>
+        <file>iconos/boligrafo.png</file>
+        <file>iconos/musica.png</file>
     </qresource>
 </RCC>
