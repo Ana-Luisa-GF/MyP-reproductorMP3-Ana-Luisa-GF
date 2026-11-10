@@ -20,3 +20,7 @@ void RepControlador::minar(std::string ruta){
 std::vector<Cancion> RepControlador::getCanciones(){
     return dao.getCanciones();
 }
+
+bool RepControlador::modificarGenero(const int &id, const std::string &nuevoGenero){
+    return dao.modificarGenero(id,nuevoGenero);
+}

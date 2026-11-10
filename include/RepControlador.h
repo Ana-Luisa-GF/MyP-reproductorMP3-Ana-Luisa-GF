@@ -14,6 +14,7 @@ public:
     RepControlador(Minero& m, CancionesDAO& daoRef);
     void minar(std::string ruta);
     std::vector<Cancion> getCanciones();
+    bool modificarGenero(const int &id, const std::string &nuevoGenero);
 
 };
 #endif

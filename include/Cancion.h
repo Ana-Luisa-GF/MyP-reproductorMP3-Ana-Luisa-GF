@@ -6,7 +6,9 @@
 
 struct Cancion{
 
+public:
 
+    int id = -1;
     std::filesystem::path ruta;
     std::string titulo;
     std::string artista;
@@ -32,6 +34,9 @@ struct Cancion{
     }
 
     Cancion(){};
+
+    void setId(int n){id = n;}
+
 };
 #endif
 

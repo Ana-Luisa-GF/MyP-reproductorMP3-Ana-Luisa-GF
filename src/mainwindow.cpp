@@ -3,6 +3,7 @@
 #include <QInputDialog>
 #include "TarjetaCancion.h"
 #include "cambiartitulo.h"
+#include <iostream>
 
 MainWindow::MainWindow(RepControlador *ctrl, QWidget *parent)
     : QMainWindow(parent)
@@ -41,7 +42,8 @@ void MainWindow::on_actionMinar_triggered()
 {
     QString ruta = QInputDialog::getText(this, "Directorio","Ingrese la ruta del directorio a minar. ");
     controlador->minar(ruta.toStdString());
-    cargarListaCanciones(controlador->getCanciones());
+    rolas = controlador->getCanciones();
+    cargarListaCanciones(rolas);
 }
 
 
@@ -127,8 +129,16 @@ void MainWindow::cancionClickeada(const Cancion& cancion)
         "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + artista_cortado+ "</span>"
         );
 
+}
 
-
+void MainWindow::refrescar(){
+    rolas = controlador->getCanciones();
+    cargarListaCanciones(rolas);
+    Cancion c;
+    for(const Cancion &rola : rolas)
+        if(rola.id == cancion_selec.id)
+            cancion_selec = rola;
+    cancionClickeada(cancion_selec);
 }
 
 void MainWindow::on_editButton_titulo_clicked()
@@ -176,9 +186,17 @@ void MainWindow::on_editButton_genero_clicked()
     CambiarTitulo ventana_titulo("Género de la canción",mensaje);
     ventana_titulo.setModal(true);
 
-    if(ventana_titulo.exec() == QDialog::Accepted)
-        qDebug() << "El diálogo retornó:" << ventana_titulo.getResultado();
+    if(ventana_titulo.exec() == QDialog::Accepted){
+        qDebug() << ventana_titulo.getResultado();
+        qDebug() << "Vamos a modificar la cancion" << QString::number(cancion_selec.id);
+
+        bool exito;
+        exito = controlador->modificarGenero(cancion_selec.id,ventana_titulo.getResultado().toStdString());
+        qDebug() << "Se hizo el cambio?: " << QString::number(exito);
+        refrescar();
+    }
 }
+
 
 
 

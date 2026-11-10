@@ -25,6 +25,7 @@ public:
     int agregarAlbun(std::filesystem::path ruta, std::string nombre);
     int agregarPerformer(std::string nombre);
     std::vector<Cancion> getCanciones();
+    bool modificarGenero(const int &id, const std::string &NuevoGenero);
 
 };
 #endif

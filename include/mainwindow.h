@@ -20,6 +20,7 @@ public:
     explicit MainWindow(RepControlador *ctrl, QWidget *parent = nullptr);
     ~MainWindow() override;
     void cargarListaCanciones(std::vector<Cancion>);
+    void refrescar();
 
 
 private slots:
@@ -43,5 +44,6 @@ private:
     Ui::MainWindow *ui;
     RepControlador *controlador;
     Cancion cancion_selec;
+    std::vector<Cancion> rolas;
 };
 #endif // MAINWINDOW_H

@@ -8,6 +8,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <pwd.h>
+
 //#include <sys/types.h>
 //#include <sstream>
 //#include <ctime>
@@ -235,16 +236,18 @@ int CancionesDAO::agregarAlbun(std::filesystem::path ruta, std::string nombre){
 
 std::vector<Cancion> CancionesDAO::getCanciones(){
     vector<Cancion> rolas;
-    std::string peticion = "SELECT r.path, r.title, r.track, r.year, r.genre, r.portada, p.name, a.name "
+    std::string peticion = "SELECT r.path, r.title, r.track, r.year, r.genre, r.portada, p.name, a.name, r.id_rola "
                            "FROM rolas r "
                            "JOIN performers p ON r.id_performer = p.id_performer "
                            "JOIN albums a ON r.id_album = a.id_album;";
 
     sqlite3_stmt* stmtSelect = nullptr;
     if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
-        return rolas;
+      return rolas;
+
 
     while(sqlite3_step(stmtSelect) == SQLITE_ROW){
+
         const unsigned char* c_ruta = sqlite3_column_text(stmtSelect, 0);
         std::string ruta = c_ruta ? reinterpret_cast<const char*>(c_ruta) : "";
 
@@ -266,8 +269,28 @@ std::vector<Cancion> CancionesDAO::getCanciones(){
         const unsigned char* c_album = sqlite3_column_text(stmtSelect, 7);
         std::string album = c_album ? reinterpret_cast<const char*>(c_album) : "Unknown";
 
+        int id = sqlite3_column_int(stmtSelect, 8);
+
         Cancion c(ruta,titulo,artista,genero,album,track,anio,portada);
+        c.setId(id);
+
         rolas.push_back(c);
     }
+    sqlite3_finalize(stmtSelect);
     return rolas;
+}
+
+bool CancionesDAO::modificarGenero(const int &id, const std::string &nuevoGenero){
+    std::string peticion = "UPDATE rolas SET genre = ? WHERE id_rola = ?";
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return false;
+
+    sqlite3_bind_text(stmtSelect, 1, nuevoGenero.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(stmtSelect, 2, id);
+
+    bool exito = (sqlite3_step(stmtSelect) == SQLITE_DONE);
+
+    sqlite3_finalize(stmtSelect);
+    return exito;
 }
