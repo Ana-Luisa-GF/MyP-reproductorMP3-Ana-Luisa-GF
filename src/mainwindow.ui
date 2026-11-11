@@ -21,54 +21,77 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QFrame" name="reprod">
+   <widget class="QStackedWidget" name="stackedWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>10</y>
-      <width>321</width>
-      <height>581</height>
+      <x>-10</x>
+      <y>0</y>
+      <width>1111</width>
+      <height>611</height>
      </rect>
     </property>
-    <property name="styleSheet">
-     <string notr="true">border: 2px solid #3498db;
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="page">
+     <widget class="QListWidget" name="listWidget">
+      <property name="geometry">
+       <rect>
+        <x>360</x>
+        <y>20</y>
+        <width>741</width>
+        <height>571</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QFrame" name="reprod">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>321</width>
+        <height>581</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 2px solid #3498db;
 
 border-radius: 10px;</string>
-    </property>
-    <property name="frameShape">
-     <enum>QFrame::Shape::StyledPanel</enum>
-    </property>
-    <property name="frameShadow">
-     <enum>QFrame::Shadow::Raised</enum>
-    </property>
-    <widget class="QLabel" name="pantalla">
-     <property name="geometry">
-      <rect>
-       <x>40</x>
-       <y>20</y>
-       <width>241</width>
-       <height>141</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">ui-&gt;label-&gt;setAutoFillBackground(true);
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <widget class="QLabel" name="pantalla">
+       <property name="geometry">
+        <rect>
+         <x>40</x>
+         <y>20</y>
+         <width>241</width>
+         <height>141</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">ui-&gt;label-&gt;setAutoFillBackground(true);
 ui-&gt;label-&gt;setStyleSheet(&quot;background-color: yellow;&quot;);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="botonPlay">
-     <property name="geometry">
-      <rect>
-       <x>120</x>
-       <y>170</y>
-       <width>70</width>
-       <height>70</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="botonPlay">
+       <property name="geometry">
+        <rect>
+         <x>120</x>
+         <y>170</y>
+         <width>70</width>
+         <height>70</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     width: 70px;
     height: 70px;
     border-radius: 35px;
@@ -91,36 +114,36 @@ QPushButton:pressed {
     padding-top: 8px; 
     padding-left: 8px; 
 }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../iconos.qrc">
-       <normaloff>:/iconos/boton-de-reproduccion.png</normaloff>
-       <normalon>:/iconos/boton-de-pausa(1).png</normalon>:/iconos/boton-de-reproduccion.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>69</width>
-       <height>69</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="botonRegresar">
-     <property name="geometry">
-      <rect>
-       <x>60</x>
-       <y>180</y>
-       <width>50</width>
-       <height>50</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../iconos.qrc">
+         <normaloff>:/iconos/boton-de-reproduccion.png</normaloff>
+         <normalon>:/iconos/boton-de-pausa(1).png</normalon>:/iconos/boton-de-reproduccion.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>69</width>
+         <height>69</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="botonRegresar">
+       <property name="geometry">
+        <rect>
+         <x>60</x>
+         <y>180</y>
+         <width>50</width>
+         <height>50</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     border-radius: 25px;
 	border: 1px solid #8f8f91;
 	background-color: #f6f6f6;
@@ -136,32 +159,32 @@ QPushButton:pressed {
     padding-top: 8px; 
     padding-left: 8px; 
 }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../iconos.qrc">
-       <normaloff>:/iconos/anterior.png</normaloff>:/iconos/anterior.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>45</width>
-       <height>45</height>
-      </size>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="botonAdelantar">
-     <property name="geometry">
-      <rect>
-       <x>200</x>
-       <y>182</y>
-       <width>51</width>
-       <height>51</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../iconos.qrc">
+         <normaloff>:/iconos/anterior.png</normaloff>:/iconos/anterior.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>45</width>
+         <height>45</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="botonAdelantar">
+       <property name="geometry">
+        <rect>
+         <x>200</x>
+         <y>182</y>
+         <width>51</width>
+         <height>51</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     border-radius: 25px;
 	border: 1px solid #8f8f91;
 	background-color: #f6f6f6;
@@ -177,120 +200,120 @@ QPushButton:pressed {
     padding-top: 8px; 
     padding-left: 8px; 
 }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../iconos.qrc">
-       <normaloff>:/iconos/siguiente-boton.png</normaloff>:/iconos/siguiente-boton.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>45</width>
-       <height>45</height>
-      </size>
-     </property>
-    </widget>
-    <widget class="QLabel" name="caja_titulo">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>244</y>
-       <width>259</width>
-       <height>49</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLabel {
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../iconos.qrc">
+         <normaloff>:/iconos/siguiente-boton.png</normaloff>:/iconos/siguiente-boton.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>45</width>
+         <height>45</height>
+        </size>
+       </property>
+      </widget>
+      <widget class="QLabel" name="caja_titulo">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>244</y>
+         <width>259</width>
+         <height>49</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
     background-color: #2b2b2b;
     border: 1px solid #444444;
     border-radius: 20px;
     padding-left: 14px;
     color: #ffffff;
 }</string>
-     </property>
-     <property name="text">
-      <string>&lt;span style=&quot;color: #b0b0b0; font-size: 10pt;&quot;&gt;Título: &lt;/span&gt;&lt;span style=&quot;color: #ff</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="caja_artista">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>299</y>
-       <width>259</width>
-       <height>49</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLabel {
+       </property>
+       <property name="text">
+        <string>&lt;span style=&quot;color: #b0b0b0; font-size: 10pt;&quot;&gt;Título: &lt;/span&gt;&lt;span style=&quot;color: #ff</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="caja_artista">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>299</y>
+         <width>259</width>
+         <height>49</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
     background-color: #2b2b2b;
     border: 1px solid #444444;
     border-radius: 20px;
     padding-left: 14px;
     color: #ffffff;
 }</string>
-     </property>
-     <property name="text">
-      <string>&lt;span style=&quot;color: #b0b0b0; font-size: 10pt;&quot;&gt;Artista: &lt;/span&gt;&lt;span style=&quot;color: #ff</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="caja_genero">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>407</y>
-       <width>259</width>
-       <height>49</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLabel {
+       </property>
+       <property name="text">
+        <string>&lt;span style=&quot;color: #b0b0b0; font-size: 10pt;&quot;&gt;Artista: &lt;/span&gt;&lt;span style=&quot;color: #ff</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="caja_genero">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>407</y>
+         <width>259</width>
+         <height>49</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
     background-color: #2b2b2b;
     border: 1px solid #444444;
     border-radius: 20px;
     padding-left: 14px;
     color: #ffffff;
 }</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Género: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="caja_album">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>353</y>
-       <width>259</width>
-       <height>49</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLabel {
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Género: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="caja_album">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>353</y>
+         <width>259</width>
+         <height>49</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
     background-color: #2b2b2b;
     border: 1px solid #444444;
     border-radius: 20px;
     padding-left: 14px;
     color: #ffffff;
 }</string>
-     </property>
-     <property name="text">
-      <string>&lt;span style=&quot;color: #b0b0b0; font-size: 10pt;&quot;&gt;Album:&lt;/span&gt;&lt;span style=&quot;color: #ff</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="editButton_artista">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>310</y>
-       <width>30</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+       </property>
+       <property name="text">
+        <string>&lt;span style=&quot;color: #b0b0b0; font-size: 10pt;&quot;&gt;Album:&lt;/span&gt;&lt;span style=&quot;color: #ff</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="editButton_artista">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>310</y>
+         <width>30</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     border-radius: 15px;
 	border: 1px solid #8f8f91;
 	background-color: #f6f6f6;
@@ -306,35 +329,35 @@ QPushButton:pressed {
     padding-top: 8px; 
     padding-left: 8px; 
 }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../iconos.qrc">
-       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>29</width>
-       <height>29</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="editButton_album">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>363</y>
-       <width>30</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../iconos.qrc">
+         <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>29</width>
+         <height>29</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="editButton_album">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>363</y>
+         <width>30</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     border-radius: 15px;
 	border: 1px solid #8f8f91;
 	background-color: #f6f6f6;
@@ -350,35 +373,35 @@ QPushButton:pressed {
     padding-top: 8px; 
     padding-left: 8px; 
 }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../iconos.qrc">
-       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>29</width>
-       <height>29</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="editButton_genero">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>417</y>
-       <width>30</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../iconos.qrc">
+         <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>29</width>
+         <height>29</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="editButton_genero">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>417</y>
+         <width>30</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     border-radius: 15px;
 	border: 1px solid #8f8f91;
 	background-color: #f6f6f6;
@@ -394,35 +417,35 @@ QPushButton:pressed {
     padding-top: 8px; 
     padding-left: 8px; 
 }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../iconos.qrc">
-       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>29</width>
-       <height>29</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="editButton_anio">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>471</y>
-       <width>30</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../iconos.qrc">
+         <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>29</width>
+         <height>29</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="editButton_anio">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>471</y>
+         <width>30</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     border-radius: 15px;
 	border: 1px solid #8f8f91;
 	background-color: #f6f6f6;
@@ -438,57 +461,57 @@ QPushButton:pressed {
     padding-top: 8px; 
     padding-left: 8px; 
 }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../iconos.qrc">
-       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>29</width>
-       <height>29</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="caja_anio">
-     <property name="geometry">
-      <rect>
-       <x>11</x>
-       <y>461</y>
-       <width>259</width>
-       <height>49</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLabel {
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../iconos.qrc">
+         <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>29</width>
+         <height>29</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="caja_anio">
+       <property name="geometry">
+        <rect>
+         <x>11</x>
+         <y>461</y>
+         <width>259</width>
+         <height>49</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
     background-color: #2b2b2b;
     border: 1px solid #444444;
     border-radius: 20px;
     padding-left: 14px;
     color: #ffffff;
 }</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Año: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="editButton_titulo">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>254</y>
-       <width>30</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Año: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="editButton_titulo">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>254</y>
+         <width>30</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     border-radius: 15px;
 	border: 1px solid #8f8f91;
 	background-color: #f6f6f6;
@@ -504,57 +527,57 @@ QPushButton:pressed {
     padding-top: 8px; 
     padding-left: 8px; 
 }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../iconos.qrc">
-       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>29</width>
-       <height>29</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="caja_track">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>520</y>
-       <width>259</width>
-       <height>49</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QLabel {
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../iconos.qrc">
+         <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>29</width>
+         <height>29</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+      <widget class="QLabel" name="caja_track">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>520</y>
+         <width>259</width>
+         <height>49</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
     background-color: #2b2b2b;
     border: 1px solid #444444;
     border-radius: 20px;
     padding-left: 14px;
     color: #ffffff;
 }</string>
-     </property>
-     <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;track: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="editButton_track">
-     <property name="geometry">
-      <rect>
-       <x>280</x>
-       <y>530</y>
-       <width>30</width>
-       <height>30</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">QPushButton {
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;track: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="editButton_track">
+       <property name="geometry">
+        <rect>
+         <x>280</x>
+         <y>530</y>
+         <width>30</width>
+         <height>30</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
     border-radius: 15px;
 	border: 1px solid #8f8f91;
 	background-color: #f6f6f6;
@@ -570,34 +593,157 @@ QPushButton:pressed {
     padding-top: 8px; 
     padding-left: 8px; 
 }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="icon">
-      <iconset resource="../iconos.qrc">
-       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
-     </property>
-     <property name="iconSize">
-      <size>
-       <width>29</width>
-       <height>29</height>
-      </size>
-     </property>
-     <property name="checkable">
-      <bool>true</bool>
-     </property>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset resource="../iconos.qrc">
+         <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+       </property>
+       <property name="iconSize">
+        <size>
+         <width>29</width>
+         <height>29</height>
+        </size>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </widget>
     </widget>
-   </widget>
-   <widget class="QListWidget" name="listWidget">
-    <property name="geometry">
-     <rect>
-      <x>350</x>
-      <y>10</y>
-      <width>741</width>
-      <height>581</height>
-     </rect>
-    </property>
+    <widget class="QWidget" name="page_2">
+     <widget class="QListWidget" name="listWidget_albums">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>10</y>
+        <width>691</width>
+        <height>581</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QFrame" name="reprod_2">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>10</y>
+        <width>351</width>
+        <height>581</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 2px solid #3498db;
+
+border-radius: 10px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <widget class="QLabel" name="caja_titulo_Album">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>320</y>
+         <width>301</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+       </property>
+       <property name="text">
+        <string>&lt;span style=&quot;color: #b0b0b0; font-size: 10pt;&quot;&gt;Título: &lt;/span&gt;&lt;span style=&quot;color: #ff</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="caja_anio_Album">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>400</y>
+         <width>301</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+       </property>
+       <property name="text">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Año: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="pantalla_album">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>311</width>
+         <height>261</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">ui-&gt;label-&gt;setAutoFillBackground(true);
+ui-&gt;label-&gt;setStyleSheet(&quot;background-color: yellow;&quot;);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="editButton_albumDatos">
+       <property name="geometry">
+        <rect>
+         <x>70</x>
+         <y>480</y>
+         <width>191</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+    border-radius: 15px; 
+    border: 1px solid #444444;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #3c3c3c, 
+                                      stop:0.5 #2b2b2b, 
+                                      stop:1.0 #222222);
+    padding: 5px; 
+    color: #ffffff; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9; 
+    color: #ffffff;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d; 
+    color: #ffffff;
+    padding-top: 8px; 
+    padding-left: 8px;
+}</string>
+       </property>
+       <property name="text">
+        <string>Editar datos del Album</string>
+       </property>
+      </widget>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">

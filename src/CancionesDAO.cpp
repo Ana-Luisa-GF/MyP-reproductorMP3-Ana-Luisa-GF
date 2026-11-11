@@ -364,3 +364,35 @@ bool CancionesDAO::modificarColumna_album(const int &id, const std::string &colu
     sqlite3_finalize(stmtSelect);
     return exito;
 }
+
+std::vector<Album> CancionesDAO::getAlbums(){
+    vector<Album> albums;
+    std::string peticion = "SELECT id_album, path, name, year, portada FROM albums;";
+
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return albums;
+
+
+    while(sqlite3_step(stmtSelect) == SQLITE_ROW){
+
+        int id = sqlite3_column_int(stmtSelect, 0);
+
+        const unsigned char* c_ruta = sqlite3_column_text(stmtSelect, 1);
+        std::string ruta = c_ruta ? reinterpret_cast<const char*>(c_ruta) : "";
+
+        const unsigned char* c_nombre = sqlite3_column_text(stmtSelect, 2);
+        std::string nombre = c_nombre ? reinterpret_cast<const char*>(c_nombre) : "";
+
+        int anio = sqlite3_column_int(stmtSelect, 3);
+
+        const unsigned char* c_portada = sqlite3_column_text(stmtSelect, 4);
+        std::string portada = c_portada ? reinterpret_cast<const char*>(c_portada) : "";
+
+        Album alb(id,ruta,nombre,portada,anio,true);
+
+        albums.push_back(alb);
+    }
+    sqlite3_finalize(stmtSelect);
+    return albums;
+}

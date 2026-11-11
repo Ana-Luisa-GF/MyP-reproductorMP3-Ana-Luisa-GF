@@ -11,8 +11,8 @@ class TarjetaCancion: public QFrame {
     Q_OBJECT
 
 public:
-    explicit TarjetaCancion(QWidget *parent=nullptr);
-    void establecerDatos(const std::string& titulo, const std::filesystem::path& portada);
+    explicit TarjetaCancion(const int &ancho, const int &alto, QWidget *parent=nullptr);
+    void establecerDatos(const QString &imagen_base, const std::string& titulo, const std::filesystem::path& portada);
 
 signals:
     void click(const std::string &titulo);

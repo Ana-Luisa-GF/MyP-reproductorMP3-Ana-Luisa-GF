@@ -29,5 +29,6 @@ public:
     bool modificarColumna(const std::string &columna, const int &id, const std::string &nuevoValor);
     Album getAlbum(const int &id);
     bool modificarColumna_album(const int &id, const std::string &columna,const int &anio, const std::string &nuevoValor);
+    std::vector<Album> getAlbums();
 };
 #endif

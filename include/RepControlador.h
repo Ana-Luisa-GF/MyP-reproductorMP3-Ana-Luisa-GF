@@ -20,6 +20,7 @@ public:
     bool modificarTitulo(const int &id, const std::string &nuevoTitulo);
     bool modificarTrack(const int &id, const std::string &nuevoTitulo);
     bool mofificarAlbum(const int &id, const std::string &columna,const int &anio, const std::string &nuevoValor);
+    std::vector<Album> getAlbums();
     Album getAlbum(const int &id);
 
 };

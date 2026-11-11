@@ -1,12 +1,12 @@
 #include "TarjetaCancion.h"
 #include <QFile>
 
-TarjetaCancion::TarjetaCancion(QWidget *parent) : QFrame(parent) {
+TarjetaCancion::TarjetaCancion(const int &ancho, const int &alto, QWidget *parent) : QFrame(parent) {
 
     QVBoxLayout *layout = new QVBoxLayout(this);
 
     labelPortada = new QLabel(this);
-    labelPortada->setFixedSize(168, 168);
+    labelPortada->setFixedSize(ancho, alto);
     labelPortada->setScaledContents(true);
 
     labelTitulo = new QLabel(this);
@@ -30,29 +30,19 @@ TarjetaCancion::TarjetaCancion(QWidget *parent) : QFrame(parent) {
         );
 }
 
-void TarjetaCancion::establecerDatos(const std::string& titulo, const std::filesystem::path& portada){
+void TarjetaCancion::establecerDatos(const QString &imagen_base,const std::string& titulo, const std::filesystem::path& portada){
     this->tituloCancion =QString::fromStdString(titulo);
     labelTitulo->setText(tituloCancion);
     QString rutaQt = QString::fromStdString(portada.string());
 
     if (!rutaQt.isEmpty() && QFile::exists(rutaQt)) {
         QPixmap pixmap(rutaQt);
-       // labelPortada->setPixmap(pixmap.scaled(labelPortada->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         labelPortada->setPixmap(pixmap.scaled(labelPortada->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     } else {
-        QPixmap pixmapDefault(":/iconos/letras-de-canciones.png");
-        //labelPortada->setPixmap(pixmapDefault.scaled(labelPortada->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        QPixmap pixmapDefault(imagen_base);
         labelPortada->setPixmap(pixmapDefault.scaled(labelPortada->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
     }
-
-    /*QString rutaQt = QString::fromStdString(portada.string());
-
-    if(!rutaQt.isEmpty() && QFile::exists(rutaQt))
-        labelPortada->setPixmap(QPixmap(rutaQt));
-    else
-        labelPortada->setPixmap(QPixmap(":/iconos/letras-de-canciones.png"));*/
-
 }
 
 void TarjetaCancion::mousePressEvent(QMouseEvent *event) {

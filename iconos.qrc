@@ -13,5 +13,6 @@
         <file>iconos/letras-de-canciones.png</file>
         <file>iconos/boligrafo.png</file>
         <file>iconos/musica.png</file>
+        <file>iconos/album-base.png</file>
     </qresource>
 </RCC>

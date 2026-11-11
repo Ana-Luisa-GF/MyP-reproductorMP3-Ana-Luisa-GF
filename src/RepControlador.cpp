@@ -44,3 +44,8 @@ Album RepControlador::getAlbum(const int &id){
 bool RepControlador::mofificarAlbum(const int &id, const std::string &columna,const int &anio, const std::string &nuevoValor){
     return  dao.modificarColumna_album(id, columna, anio, nuevoValor);
 }
+
+std::vector<Album> RepControlador::getAlbums(){
+    return dao.getAlbums();
+}
+
