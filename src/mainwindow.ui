@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1099</width>
-    <height>646</height>
+    <height>680</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,7 @@
       <x>10</x>
       <y>10</y>
       <width>321</width>
-      <height>541</height>
+      <height>581</height>
      </rect>
     </property>
     <property name="styleSheet">
@@ -46,8 +46,8 @@ border-radius: 10px;</string>
       <rect>
        <x>40</x>
        <y>20</y>
-       <width>231</width>
-       <height>161</height>
+       <width>241</width>
+       <height>141</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -62,7 +62,7 @@ ui-&gt;label-&gt;setStyleSheet(&quot;background-color: yellow;&quot;);</string>
      <property name="geometry">
       <rect>
        <x>120</x>
-       <y>188</y>
+       <y>170</y>
        <width>70</width>
        <height>70</height>
       </rect>
@@ -114,7 +114,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>60</x>
-       <y>198</y>
+       <y>180</y>
        <width>50</width>
        <height>50</height>
       </rect>
@@ -155,9 +155,9 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>200</x>
-       <y>200</y>
-       <width>50</width>
-       <height>50</height>
+       <y>182</y>
+       <width>51</width>
+       <height>51</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -196,7 +196,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>264</y>
+       <y>244</y>
        <width>259</width>
        <height>49</height>
       </rect>
@@ -218,7 +218,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>319</y>
+       <y>299</y>
        <width>259</width>
        <height>49</height>
       </rect>
@@ -240,7 +240,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>427</y>
+       <y>407</y>
        <width>259</width>
        <height>49</height>
       </rect>
@@ -262,7 +262,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>373</y>
+       <y>353</y>
        <width>259</width>
        <height>49</height>
       </rect>
@@ -284,7 +284,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>330</y>
+       <y>310</y>
        <width>30</width>
        <height>30</height>
       </rect>
@@ -328,7 +328,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>383</y>
+       <y>363</y>
        <width>30</width>
        <height>30</height>
       </rect>
@@ -372,7 +372,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>437</y>
+       <y>417</y>
        <width>30</width>
        <height>30</height>
       </rect>
@@ -416,7 +416,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>491</y>
+       <y>471</y>
        <width>30</width>
        <height>30</height>
       </rect>
@@ -460,7 +460,7 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>11</x>
-       <y>481</y>
+       <y>461</y>
        <width>259</width>
        <height>49</height>
       </rect>
@@ -482,7 +482,73 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>274</y>
+       <y>254</y>
+       <width>30</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    border-radius: 15px;
+	border: 1px solid #8f8f91;
+	background-color: #f6f6f6;
+	padding: 5px; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../iconos.qrc">
+       <normaloff>:/iconos/boligrafo.png</normaloff>:/iconos/boligrafo.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>29</width>
+       <height>29</height>
+      </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QLabel" name="caja_track">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>520</y>
+       <width>259</width>
+       <height>49</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;track: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="editButton_track">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>530</y>
        <width>30</width>
        <height>30</height>
       </rect>
@@ -529,7 +595,7 @@ QPushButton:pressed {
       <x>350</x>
       <y>10</y>
       <width>741</width>
-      <height>541</height>
+      <height>581</height>
      </rect>
     </property>
    </widget>

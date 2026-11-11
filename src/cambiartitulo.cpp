@@ -19,6 +19,10 @@ CambiarTitulo::CambiarTitulo(const QString &titulo_ventana, const QString &titul
         ui->label->setText("<html><head/><body><p align='center'><span style='font-size:14pt; "
                           "font-weight:700; color:#1E90FF;'>EDITAR GÉNERO:</span></p></body></html>");
 
+   if(titulo_ventana == "Track de la canción")
+       ui->label->setText("<html><head/><body><p align='center'><span style='font-size:14pt; "
+                          "font-weight:700; color:#1E90FF;'>EDITAR TRACK:</span></p></body></html>");
+
    if(titulo_ventana == "Año de la canción")
         ui->label->setText("<html><head/><body><p align='center'><span style='font-size:10pt; "
                           "font-weight:700; color:#1E90FF;'>EDITAR AÑO DE SALIDA:</span></p></body></html>");

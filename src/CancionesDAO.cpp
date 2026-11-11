@@ -9,11 +9,6 @@
 #include <sys/stat.h>
 #include <pwd.h>
 
-//#include <sys/types.h>
-//#include <sstream>
-//#include <ctime>
-
-
 using namespace std;
 namespace fileSys= std::filesystem;
 
@@ -92,6 +87,17 @@ void CancionesDAO::crearBaseDeDatos(){
             sqlite3_close(baseDeDatos);
             exit(1);
         }
+
+        mensajeError = nullptr;
+        consultaSql = "ALTER TABLE albums ADD COLUMN portada TEXT;";
+        mensaje = sqlite3_exec(baseDeDatos, consultaSql.c_str(), 0, 0, &mensajeError);
+
+        if (mensaje != SQLITE_OK) {
+            fprintf(stderr, "Error al crear las tablas: %s\n", mensajeError);
+            sqlite3_free(mensajeError);
+            sqlite3_close(baseDeDatos);
+            exit(1);
+        }
     }
 
 }
@@ -127,7 +133,7 @@ void CancionesDAO::agregarCanciones(const std::vector<Cancion>& listCanciones){
         performer = agregarPerformer(cancion.artista);
         if(performer == -1)
             continue;
-        album = agregarAlbun(cancion.ruta.parent_path().string(),cancion.album);
+        album = agregarAlbun(cancion.ruta.parent_path().string(),cancion.album, cancion.portada);
         if(album == -1)
         continue;
         
@@ -191,7 +197,7 @@ int CancionesDAO::agregarPerformer(std::string nombre){
     return id_performer;
 }
 
-int CancionesDAO::agregarAlbun(std::filesystem::path ruta, std::string nombre){
+int CancionesDAO::agregarAlbun(std::filesystem::path ruta, std::string nombre, std::string portada){
 
     string peticion1 = "SELECT * FROM albums WHERE name = ? AND path = ?";
     sqlite3_stmt* stmtSelect = nullptr;
@@ -210,7 +216,7 @@ int CancionesDAO::agregarAlbun(std::filesystem::path ruta, std::string nombre){
     sqlite3_finalize(stmtSelect);
 
 
-    string peticion2 = "INSERT OR IGNORE INTO albums (path, name) VALUES (?, ?);";
+    string peticion2 = "INSERT OR IGNORE INTO albums (path, name,year,portada) VALUES (?, ?, 2026, ?);";
     sqlite3_stmt* stmtInsert = nullptr;
 
     if (sqlite3_prepare_v2(baseDeDatos, peticion2.c_str(), -1, &stmtInsert, nullptr) != SQLITE_OK)
@@ -219,6 +225,7 @@ int CancionesDAO::agregarAlbun(std::filesystem::path ruta, std::string nombre){
 
     sqlite3_bind_text(stmtInsert, 1, ruta.string().c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(stmtInsert, 2, nombre.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmtInsert, 3, portada.c_str(), -1, SQLITE_TRANSIENT);
 
     if (sqlite3_step(stmtInsert) != SQLITE_DONE){
         fprintf(stderr, "Error al insertar album: %s\n", sqlite3_errmsg(baseDeDatos));
@@ -236,7 +243,7 @@ int CancionesDAO::agregarAlbun(std::filesystem::path ruta, std::string nombre){
 
 std::vector<Cancion> CancionesDAO::getCanciones(){
     vector<Cancion> rolas;
-    std::string peticion = "SELECT r.path, r.title, r.track, r.year, r.genre, r.portada, p.name, a.name, r.id_rola "
+    std::string peticion = "SELECT r.path, r.title, r.track, r.year, r.genre, r.portada, p.name, a.name, r.id_rola, a.id_album, r.id_performer "
                            "FROM rolas r "
                            "JOIN performers p ON r.id_performer = p.id_performer "
                            "JOIN albums a ON r.id_album = a.id_album;";
@@ -270,9 +277,12 @@ std::vector<Cancion> CancionesDAO::getCanciones(){
         std::string album = c_album ? reinterpret_cast<const char*>(c_album) : "Unknown";
 
         int id = sqlite3_column_int(stmtSelect, 8);
+        int id_album = sqlite3_column_int(stmtSelect, 9);
+        int id_performer = sqlite3_column_int(stmtSelect, 10);
 
         Cancion c(ruta,titulo,artista,genero,album,track,anio,portada);
         c.setId(id);
+        c.setIdAlbum(id_album);
 
         rolas.push_back(c);
     }
@@ -280,13 +290,73 @@ std::vector<Cancion> CancionesDAO::getCanciones(){
     return rolas;
 }
 
-bool CancionesDAO::modificarGenero(const int &id, const std::string &nuevoGenero){
-    std::string peticion = "UPDATE rolas SET genre = ? WHERE id_rola = ?";
+bool CancionesDAO::modificarColumna(const std::string &columna, const int &id, const std::string &nuevoValor){
+    if (columna != "genre" && columna != "title" && columna != "year" & columna != "track")
+        return false;
+
+    std::string peticion = "UPDATE rolas SET " + columna + " = ? WHERE id_rola = ?";
+
     sqlite3_stmt* stmtSelect = nullptr;
     if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
         return false;
 
-    sqlite3_bind_text(stmtSelect, 1, nuevoGenero.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmtSelect, 1, nuevoValor.c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_int(stmtSelect, 2, id);
+
+    bool exito = (sqlite3_step(stmtSelect) == SQLITE_DONE);
+
+    sqlite3_finalize(stmtSelect);
+    return exito;
+}
+
+Album CancionesDAO::getAlbum(const int &id){
+    Album album;
+    string peticion = "SELECT id_album, path, name, year, portada FROM albums WHERE id_album = ?";
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK){
+        album.album_valido=false;
+        return album;
+    }
+
+    sqlite3_bind_int(stmtSelect, 1, id);
+
+    if(sqlite3_step(stmtSelect) == SQLITE_ROW){
+        int albumId = sqlite3_column_int(stmtSelect, 0);
+
+        const unsigned char* pathPtr = sqlite3_column_text(stmtSelect, 1);
+        std::string ruta = pathPtr ? reinterpret_cast<const char*>(pathPtr) : "";
+
+        const unsigned char* namePtr = sqlite3_column_text(stmtSelect, 2);
+        std::string nombre = namePtr ? reinterpret_cast<const char*>(namePtr) : "";
+
+        int anio = sqlite3_column_int(stmtSelect, 3);
+
+        const unsigned char* portadaPtr = sqlite3_column_text(stmtSelect, 4);
+        std::string portada = portadaPtr ? reinterpret_cast<const char*>(portadaPtr) : "";
+
+        sqlite3_finalize(stmtSelect);
+        return Album(albumId, ruta, nombre, portada, anio, true);
+    }
+    sqlite3_finalize(stmtSelect);
+    album.album_valido=false;
+    return album;
+}
+
+bool CancionesDAO::modificarColumna_album(const int &id, const std::string &columna,const int &anio, const std::string &nuevoValor){
+    if (columna != "name" && columna != "year")
+        return false;
+
+    std::string peticion = "UPDATE albums SET " + columna + " = ? WHERE id_album = ?";
+
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return false;
+
+    if(columna == "name")
+        sqlite3_bind_text(stmtSelect, 1, nuevoValor.c_str(), -1, SQLITE_TRANSIENT);
+    else
+        sqlite3_bind_int(stmtSelect, 1, anio);
+
     sqlite3_bind_int(stmtSelect, 2, id);
 
     bool exito = (sqlite3_step(stmtSelect) == SQLITE_DONE);

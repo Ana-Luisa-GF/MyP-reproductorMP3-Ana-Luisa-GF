@@ -5,6 +5,7 @@
 #include <sqlite3.h>
 #include <filesystem>
 #include <vector>
+#include "Album.h"
 
 class CancionesDAO{
  
@@ -22,10 +23,11 @@ public:
 
     void crearBaseDeDatos();
     void agregarCanciones(const std::vector<Cancion>& listCanciones);
-    int agregarAlbun(std::filesystem::path ruta, std::string nombre);
+    int agregarAlbun(std::filesystem::path ruta, std::string nombre,std::string portada);
     int agregarPerformer(std::string nombre);
     std::vector<Cancion> getCanciones();
-    bool modificarGenero(const int &id, const std::string &NuevoGenero);
-
+    bool modificarColumna(const std::string &columna, const int &id, const std::string &nuevoValor);
+    Album getAlbum(const int &id);
+    bool modificarColumna_album(const int &id, const std::string &columna,const int &anio, const std::string &nuevoValor);
 };
 #endif

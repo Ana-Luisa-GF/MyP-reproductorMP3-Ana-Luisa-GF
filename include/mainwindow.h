@@ -40,6 +40,8 @@ private slots:
 
     void on_editButton_anio_clicked();
 
+    void on_editButton_track_clicked();
+
 private:
     Ui::MainWindow *ui;
     RepControlador *controlador;

@@ -3,7 +3,10 @@
 #include <QInputDialog>
 #include "TarjetaCancion.h"
 #include "cambiartitulo.h"
+#include "cambiaralbum.h"
 #include <iostream>
+#include <QMessageBox>
+#include <QDate>
 
 MainWindow::MainWindow(RepControlador *ctrl, QWidget *parent)
     : QMainWindow(parent)
@@ -129,6 +132,11 @@ void MainWindow::cancionClickeada(const Cancion& cancion)
         "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + artista_cortado+ "</span>"
         );
 
+    std::string texto3 = "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Track: </span>  <span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>";
+
+    std::string texto4 = texto3+std::to_string(cancion.track)+"</span>";
+    ui->caja_track->setText(texto4.c_str());
+
 }
 
 void MainWindow::refrescar(){
@@ -149,23 +157,15 @@ void MainWindow::on_editButton_titulo_clicked()
 
     CambiarTitulo ventana_titulo("Titulo de la canción",mensaje);
     ventana_titulo.setModal(true);
-    ventana_titulo.exec();
+    if(ventana_titulo.exec() == QDialog::Accepted){
+        if(!controlador->modificarTitulo(cancion_selec.id,ventana_titulo.getResultado().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        refrescar();
+    }
 }
 
 
 void MainWindow::on_editButton_artista_clicked()
-{
-    QString mensaje="";
-    if(!cancion_selec.ruta.empty())
-        mensaje =  QString::fromStdString(cancion_selec.artista);
-
-    CambiarTitulo ventana_titulo("Artista de la canción",mensaje);
-    ventana_titulo.setModal(true);
-    ventana_titulo.exec();
-}
-
-
-void MainWindow::on_editButton_album_clicked()
 {
     QString mensaje="";
     if(!cancion_selec.ruta.empty())
@@ -174,6 +174,35 @@ void MainWindow::on_editButton_album_clicked()
     CambiarTitulo ventana_titulo("Album de la canción",mensaje);
     ventana_titulo.setModal(true);
     ventana_titulo.exec();
+}
+
+
+void MainWindow::on_editButton_album_clicked()
+{   
+    QString nombre="";
+    Album album;
+    if(!cancion_selec.ruta.empty())
+        album = controlador->getAlbum(cancion_selec.id_album);
+    else
+        album.anio = 0;
+
+    nombre =  QString::fromStdString(album.nombre);
+    CambiarAlbum ventana(album.anio,nombre);
+    ventana.setModal(true);
+
+    if(ventana.exec() == QDialog::Accepted && !cancion_selec.ruta.empty()){
+        int anioActual = QDate::currentDate().year();
+        if(!ventana.getConversionAnio() || ventana.getNuenoAnio() < 0 || ventana.getNuenoAnio() >anioActual ){
+            QMessageBox::critical(this, "Error", "El año proporcionado no es valido.");
+            return;
+        }
+        if(!controlador->mofificarAlbum(album.id,"name",ventana.getNuenoAnio(),ventana.getNuevoAlbum().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+
+        if(!controlador->mofificarAlbum(album.id,"year",ventana.getNuenoAnio(),ventana.getNuevoAlbum().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        refrescar();
+    }
 }
 
 
@@ -186,13 +215,9 @@ void MainWindow::on_editButton_genero_clicked()
     CambiarTitulo ventana_titulo("Género de la canción",mensaje);
     ventana_titulo.setModal(true);
 
-    if(ventana_titulo.exec() == QDialog::Accepted){
-        qDebug() << ventana_titulo.getResultado();
-        qDebug() << "Vamos a modificar la cancion" << QString::number(cancion_selec.id);
-
-        bool exito;
-        exito = controlador->modificarGenero(cancion_selec.id,ventana_titulo.getResultado().toStdString());
-        qDebug() << "Se hizo el cambio?: " << QString::number(exito);
+    if(ventana_titulo.exec() == QDialog::Accepted && !cancion_selec.ruta.empty()){
+        if(!controlador->modificarGenero(cancion_selec.id,ventana_titulo.getResultado().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
         refrescar();
     }
 }
@@ -208,6 +233,47 @@ void MainWindow::on_editButton_anio_clicked()
 
     CambiarTitulo ventana_titulo("Año de la canción",mensaje);
     ventana_titulo.setModal(true);
-    ventana_titulo.exec();
+
+    if(ventana_titulo.exec() == QDialog::Accepted && !cancion_selec.ruta.empty()){
+        int anioActual = QDate::currentDate().year();
+        bool conversion_anio;
+        int anio = ventana_titulo.getResultado().toInt(&conversion_anio);
+
+        if(!conversion_anio || anio < 0 || anio > anioActual ){
+            QMessageBox::critical(this, "Error", "El año proporcionado no es valido.");
+            return;
+        }
+
+        if(!controlador->modificarAnio(cancion_selec.id,ventana_titulo.getResultado().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+
+        refrescar();
+    }
+}
+
+
+void MainWindow::on_editButton_track_clicked()
+{
+    QString mensaje="";
+    if(!cancion_selec.ruta.empty())
+        mensaje =  QString::number(cancion_selec.track);
+
+    CambiarTitulo ventana_titulo("Track de la canción",mensaje);
+    ventana_titulo.setModal(true);
+
+    if(ventana_titulo.exec() == QDialog::Accepted && !cancion_selec.ruta.empty()){
+
+        bool conversion_entero;
+        int num = ventana_titulo.getResultado().toInt(&conversion_entero);
+
+        if(!conversion_entero || num < 0){
+            QMessageBox::critical(this, "Error", "El track proporcionado no es valido.");
+            return;
+        }
+
+        if(!controlador->modificarTrack(cancion_selec.id,ventana_titulo.getResultado().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        refrescar();
+    }
 }
 

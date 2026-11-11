@@ -27,7 +27,6 @@ private:
     QString titulo_cancion="";
 
     QString resultado;
-    bool modificado = false;
 };
 
 #endif // CAMBIARTITULO_H

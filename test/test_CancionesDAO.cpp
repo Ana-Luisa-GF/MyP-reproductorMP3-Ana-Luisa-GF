@@ -57,14 +57,15 @@ TEST(DAO_Test, AgregarAlbum) {
     dao.crearBaseDeDatos();
     std::string nombreAlbum = "Albun_prueba";
     fileSys::path rutaFalsa = "/musica/Album_prueba";
-    dao.agregarAlbun(rutaFalsa, nombreAlbum);
+    dao.agregarAlbun(rutaFalsa, nombreAlbum,nombreAlbum);
 
     sqlite3_stmt* stmt = nullptr;
-    std::string consulta = "SELECT * FROM albums WHERE name = ? AND path = ?;";
+    std::string consulta = "SELECT * FROM albums WHERE name = ? AND path = ? AND portada = ?;";
     sqlite3_prepare_v2(dao.getConexion(), consulta.c_str(), -1, &stmt, nullptr);
 
     sqlite3_bind_text(stmt, 1, nombreAlbum.c_str(), -1, SQLITE_TRANSIENT);
     sqlite3_bind_text(stmt, 2, rutaFalsa.string().c_str(), -1, SQLITE_TRANSIENT);
+    sqlite3_bind_text(stmt, 3, nombreAlbum.c_str(), -1, SQLITE_TRANSIENT);
 
     EXPECT_TRUE(sqlite3_step(stmt) == SQLITE_ROW);
 }
