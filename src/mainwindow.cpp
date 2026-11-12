@@ -4,6 +4,7 @@
 #include "TarjetaCancion.h"
 #include "cambiartitulo.h"
 #include "cambiaralbum.h"
+#include "cambiarperformer.h"
 #include <iostream>
 #include <QMessageBox>
 #include <QDate>
@@ -31,6 +32,8 @@ MainWindow::MainWindow(RepControlador *ctrl, QWidget *parent)
 
     std::vector<Album> albums = controlador->getAlbums();
     cargarListaAlbums(albums);
+    std::vector<Performer> performers = controlador->getPerformers();
+    cargarListaPerformers(performers);
 }
 
 MainWindow::~MainWindow()
@@ -48,10 +51,15 @@ void MainWindow::on_actionMinar_triggered()
 {
     QString ruta = QInputDialog::getText(this, "Directorio","Ingrese la ruta del directorio a minar. ");
     controlador->minar(ruta.toStdString());
-    rolas = controlador->getCanciones();
-    cargarListaCanciones(rolas);
-}
+    //rolas = controlador->getCanciones();
+    //cargarListaCanciones(rolas);
+    //std::vector<Album> albums = controlador->getAlbums();
+    //cargarListaAlbums(albums);
+    //std::vector<Performer> performers = controlador->getPerformers();
+    //cargarListaPerformers(performers);
+    refrescar();
 
+}
 
 void MainWindow::cargarListaCanciones(std::vector<Cancion> rolas){
     ui->listWidget->clear();
@@ -83,12 +91,10 @@ void MainWindow::cancionClickeada(const Cancion& cancion)
 
     if (!rutaQt.isEmpty() && QFile::exists(rutaQt)) {
         QPixmap pixmap(rutaQt);
-        //ui->pantalla->setPixmap(pixmap.scaled(ui->pantalla->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         ui->pantalla->setPixmap(pixmap.scaled(ui->pantalla->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
     } else {
         QPixmap pixmapDefault(":/iconos/letras-de-canciones.png");
-        //ui->pantalla->setPixmap(pixmapDefault.scaled(ui->pantalla->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation));
         ui->pantalla->setPixmap(pixmapDefault.scaled(ui->pantalla->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     }
 
@@ -157,6 +163,13 @@ void MainWindow::refrescar(){
     album_selec = controlador->getAlbum(album_selec.id);
 
     albumClickeado(album_selec);
+
+    std::vector<Performer> performers = controlador->getPerformers();
+    cargarListaPerformers(performers);
+
+    if(performer_selec.performer_valido)
+        performer_selec = controlador->getPerformer(performer_selec.id);
+    performerClickeado(performer_selec);
 }
 
 void MainWindow::on_editButton_titulo_clicked()
@@ -367,3 +380,187 @@ void MainWindow::albumClickeado(const Album& album){
     ui->caja_anio_Album->setText(texto2.c_str());
 
 }
+
+void MainWindow::on_actionPerformers_triggered()
+{
+    ui->stackedWidget->setCurrentIndex(2);
+}
+
+void MainWindow::cargarListaPerformers(std::vector<Performer> performers){
+
+    ui->listWidget_performers->clear();
+    ui->listWidget_performers->setViewMode(QListWidget::IconMode);
+    ui->listWidget_performers->setResizeMode(QListWidget::Adjust);
+    ui->listWidget_performers->setGridSize(QSize(223, 223));
+    ui->listWidget_performers->setWordWrap(true);
+
+    for (const Performer& perf : performers) {
+        QListWidgetItem* item = new QListWidgetItem(ui->listWidget_performers);
+
+        TarjetaCancion* tarjeta = new TarjetaCancion(221,221, ui->listWidget_performers);
+
+        if(perf.id_type == 1)
+            tarjeta->establecerDatos(":/iconos/grupo.png", perf.nombre, perf.ruta_imagen);
+        else
+            if(perf.id_type == 0)
+              tarjeta->establecerDatos(":/iconos/artista_base.png", perf.nombre, perf.ruta_imagen);
+            else
+            tarjeta->establecerDatos(":/iconos/performer.png", perf.nombre, perf.ruta_imagen);
+
+        item->setSizeHint(tarjeta->sizeHint());
+        ui->listWidget_performers->setItemWidget(item, tarjeta);
+        connect(tarjeta, &TarjetaCancion::click, this, [this, perf](const std::string &titulo) {
+            this->performerClickeado(perf);
+        });
+    }
+}
+
+
+void MainWindow::performerClickeado(const Performer& performer){
+    performer_selec = performer;
+    QString rutaQt = QString::fromStdString(performer.ruta_imagen);
+
+    if (!rutaQt.isEmpty() && QFile::exists(rutaQt)) {
+        QPixmap pixmap(rutaQt);
+        ui->pantalla_performer->setPixmap(pixmap.scaled(ui->pantalla_performer->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+
+    } else {
+        QPixmap pixmapDefault;
+        if(performer.id == 0)
+            pixmapDefault.load(":/iconos/artista_base.png");   //NO FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        else
+            if(performer.id_type == 1)
+                pixmapDefault.load(":/iconos/grupo.png");
+            else
+                pixmapDefault.load(":/iconos/performer.png");
+        ui->pantalla_performer->setPixmap(pixmapDefault.scaled(ui->pantalla_performer->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    }
+
+    diseñoVentanaPerformer(performer_selec.id_type);
+}
+
+
+void MainWindow::diseñoVentanaPerformer(const int &tipo_performer){
+    if(tipo_performer == 2){
+
+        ui->stackedWidget_performer->setCurrentIndex(0);
+        int anchoDisponible = 261 - 75;
+
+        QFontMetrics metrics1(ui->caja_performer->font());
+        QString titulo = QString::fromStdString(performer_selec.nombre);
+        QString titulo_cortado = metrics1.elidedText(titulo, Qt::ElideRight, anchoDisponible);
+
+        ui->caja_performer->setText(
+            "<span style='color: #b0b0b0; font-size: 11pt; font-weight: normal;'>Nombre: </span>"
+            "<span style='color: #ffffff; font-size: 12pt; font-weight: bold;'>" + titulo_cortado + "</span>"
+            );
+
+        return;
+    }else{
+        if(tipo_performer == 0){
+
+            artista_selec = controlador->getPerson(performer_selec.nombre);
+            ui->stackedWidget_performer->setCurrentIndex(1);
+            int anchoDisponible = 261 - 75;
+
+            QFontMetrics metrics1(ui->caja_nombreArt_person->font());
+            QString nombreArt = QString::fromStdString(artista_selec.stage_name);
+            QString nombreArt_cortado = metrics1.elidedText(nombreArt, Qt::ElideRight, anchoDisponible);
+
+            ui->caja_nombreArt_person->setText(
+                "<span style='color: #b0b0b0; font-size: 11pt; font-weight: normal;'>Nombre art: </span>"
+                "<span style='color: #ffffff; font-size: 12pt; font-weight: bold;'>" + nombreArt_cortado + "</span>"
+                );
+
+            QFontMetrics metrics2(ui->caja_nombreReal_person->font());
+            QString nombreReal = QString::fromStdString(artista_selec.real_name);
+            QString nombreReal_cortado = metrics2.elidedText(nombreReal, Qt::ElideRight, anchoDisponible);
+
+            ui->caja_nombreReal_person->setText(
+                "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Nombre real: </span>"
+                "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + nombreReal_cortado + "</span>"
+                );
+
+            QFontMetrics metrics3(ui->caja_fechaCumple_person->font());
+            QString fechaCumple = QString::fromStdString(artista_selec.birth_date);
+            QString fechaCumple_cortado = metrics3.elidedText(fechaCumple, Qt::ElideRight, anchoDisponible);
+
+            ui->caja_fechaCumple_person->setText(
+                "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Fecha cumpleaños: </span>"
+                "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + fechaCumple_cortado + "</span>"
+                );
+
+            QFontMetrics metrics4(ui->caja_fechaMuerte_person->font());
+            QString fechaMuerte = QString::fromStdString(artista_selec.death_date);
+            QString fechaMuerte_cortado = metrics4.elidedText(fechaMuerte, Qt::ElideRight, anchoDisponible);
+
+            ui->caja_fechaMuerte_person->setText(
+                "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Fecha muerte: </span>"
+                "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + fechaMuerte_cortado + "</span>"
+                );
+
+            return;
+
+        }else{
+
+            grupo_selec = controlador->getGroup(performer_selec.nombre);
+
+            if(!grupo_selec.grupo_valido)
+                QMessageBox::critical(this, "Error", "No obtuvimos un grupo valido.");
+
+            ui->stackedWidget_performer->setCurrentIndex(2);
+            int anchoDisponible = 261 - 75;
+
+            QFontMetrics metrics1(ui->caja_nombre_grupo->font());
+            QString nombre = QString::fromStdString(grupo_selec.name);
+            QString nombre_cortado = metrics1.elidedText(nombre, Qt::ElideRight, anchoDisponible);
+
+            ui->caja_nombre_grupo->setText(
+                "<span style='color: #b0b0b0; font-size: 11pt; font-weight: normal;'>Nombre: </span>"
+                "<span style='color: #ffffff; font-size: 12pt; font-weight: bold;'>" + nombre_cortado + "</span>"
+                );
+
+            QFontMetrics metrics2(ui->caja_fechaCrea_grupo->font());
+            QString fechaCrea = QString::fromStdString(grupo_selec.start_date);
+            QString fechaCrea_cortado = metrics2.elidedText(fechaCrea, Qt::ElideRight, anchoDisponible);
+
+            ui->caja_fechaCrea_grupo->setText(
+                "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Fecha creación: </span>"
+                "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + fechaCrea_cortado + "</span>"
+                );
+
+            QFontMetrics metrics3(ui->caja_fechaDis_grupo->font());
+            QString fechaDis = QString::fromStdString(grupo_selec.end_date);
+            QString fechaDis_cortado = metrics3.elidedText(fechaDis, Qt::ElideRight, anchoDisponible);
+
+            ui->caja_fechaDis_grupo->setText(
+                "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Fecha disolución: </span>"
+                "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + fechaDis_cortado + "</span>"
+                );
+        }
+    }
+
+}
+
+void  MainWindow::cambiarDatosPerformer(){
+    cambiarPerformer ventana;
+    ventana.setModal(true);
+    if(ventana.exec() == QDialog::Accepted && performer_selec.performer_valido){
+        int tipo = ventana.getTipo() == "Artista"? 0 : 1;
+        if(!controlador->definirTipoPerformer(performer_selec.id,tipo))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+
+        if(tipo == 0){
+            controlador->agregarPerson(performer_selec.nombre);
+        }else{
+            controlador->agregarGrupo(performer_selec.nombre);
+        }
+        refrescar();
+    }
+}
+
+void MainWindow::on_editButton_performer_clicked()
+{
+    cambiarDatosPerformer();
+}
+

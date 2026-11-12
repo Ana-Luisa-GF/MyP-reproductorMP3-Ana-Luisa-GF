@@ -1,5 +1,6 @@
 #include "TarjetaCancion.h"
 #include <QFile>
+#include <QDebug>
 
 TarjetaCancion::TarjetaCancion(const int &ancho, const int &alto, QWidget *parent) : QFrame(parent) {
 
@@ -43,6 +44,7 @@ void TarjetaCancion::establecerDatos(const QString &imagen_base,const std::strin
         labelPortada->setPixmap(pixmapDefault.scaled(labelPortada->size(), Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
     }
+
 }
 
 void TarjetaCancion::mousePressEvent(QMouseEvent *event) {

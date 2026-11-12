@@ -4,6 +4,9 @@
 #include <QMainWindow>
 #include "RepControlador.h"
 #include "Cancion.h"
+#include "Performer.h"
+#include "Person.h"
+#include "Group.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -21,8 +24,15 @@ public:
     ~MainWindow() override;
     void cargarListaCanciones(std::vector<Cancion>);
     void cargarListaAlbums(std::vector<Album> albums);
+    void cargarListaPerformers(std::vector<Performer> performers);
     void modificarAlbum(const int &boton);
+    void performerClickeado(const Performer& performer);
+    void diseñoVentanaPerformer(const int &tipo_performer);
+    void cambiarDatosPerformer();
+
     void refrescar();
+
+
 
 
 private slots:
@@ -31,6 +41,8 @@ private slots:
     void on_actionMinar_triggered();
 
     void albumClickeado(const Album& album);
+
+
 
     void cancionClickeada(const Cancion& cancion);
 
@@ -53,11 +65,18 @@ private slots:
 
     void on_editButton_albumDatos_clicked();
 
+    void on_actionPerformers_triggered();
+
+    void on_editButton_performer_clicked();
+
 private:
     Ui::MainWindow *ui;
     RepControlador *controlador;
     Cancion cancion_selec;
     Album album_selec;
+    Performer performer_selec;
+    Person artista_selec;
+    Group grupo_selec;
     std::vector<Cancion> rolas;
 };
 #endif // MAINWINDOW_H

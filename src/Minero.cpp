@@ -62,6 +62,7 @@ Cancion Minero::leerEtiquetas(const path& archivoMp3){
 
     TagLib::Tag *tag = f.tag();
     path rutaPortada = "";
+    path rutaImagenArtista = "";
 
     TagLib::MPEG::File archivoMpeg(archivoMp3.string().c_str());
     if (archivoMpeg.isValid()) {
@@ -75,8 +76,11 @@ Cancion Minero::leerEtiquetas(const path& archivoMp3){
 
                 if (apicFrame->type() == TagLib::ID3v2::AttachedPictureFrame::FrontCover) {
                     TagLib::ByteVector datosImagen = apicFrame->picture();
-                    rutaPortada = guardarImagen(datosImagen, archivoMp3);
-                    break;
+                    rutaPortada = guardarImagen(datosImagen, archivoMp3,"album");
+                }
+                else if (apicFrame->type() == TagLib::ID3v2::AttachedPictureFrame::Artist) {
+                    TagLib::ByteVector datosImagen = apicFrame->picture();
+                    rutaImagenArtista = guardarImagen(datosImagen, archivoMp3,"performer");
                 }
             }
         }
@@ -84,10 +88,11 @@ Cancion Minero::leerEtiquetas(const path& archivoMp3){
 
     Cancion c(archivoMp3, tag->title().toCString(true), tag->artist().toCString(true), tag->genre().toCString(true),
               tag->album().toCString(true), tag->track(), tag->year(), rutaPortada);
+    c.setPortadaArtist(rutaImagenArtista);
     return c;
 }
 
-path Minero::guardarImagen(const TagLib::ByteVector& datosImagen, path rutaCancion) {
+path Minero::guardarImagen(const TagLib::ByteVector& datosImagen, const path &rutaCancion, const std::string &tipo_imagen) {
     path rutaCompletaImagen;
     if (datosImagen.isEmpty()) return rutaCompletaImagen;
 
@@ -105,7 +110,7 @@ path Minero::guardarImagen(const TagLib::ByteVector& datosImagen, path rutaCanci
         }
     }
 
-    std::string nombreArchivo = rutaCancion.stem().string() + ".jpg";
+    std::string nombreArchivo = rutaCancion.stem().string() +"_"+tipo_imagen+ ".jpg";
     rutaCompletaImagen = rutaDirectorioImg / nombreArchivo;
 
     std::ofstream archivoSalida(rutaCompletaImagen, std::ios::out | std::ios::binary);

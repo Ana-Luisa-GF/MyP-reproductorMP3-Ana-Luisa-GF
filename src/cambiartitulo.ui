@@ -51,7 +51,7 @@
     <string/>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>100</x>
@@ -91,6 +91,74 @@ QPushButton:pressed {
     </item>
     <item row="0" column="1">
      <widget class="QPushButton" name="realizado_2">
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #000000;
+    color: white;   
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 10px; 
+    border-color: #2b2b2b;  
+    font: bold 14px;
+    padding: 6px;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+      </property>
+      <property name="text">
+       <string>Cancelar</string>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QWidget" name="layoutWidget_2">
+   <property name="geometry">
+    <rect>
+     <x>250</x>
+     <y>330</y>
+     <width>331</width>
+     <height>74</height>
+    </rect>
+   </property>
+   <layout class="QGridLayout" name="gridLayout_2">
+    <item row="0" column="0">
+     <widget class="QPushButton" name="realizado_3">
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #000000;
+    color: white;   
+    border-style: outset;
+    border-width: 2px;
+    border-radius: 10px; 
+    border-color: #2b2b2b;  
+    font: bold 14px;
+    padding: 6px;
+}
+QPushButton:hover {
+    background-color: #2980b9;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d;
+    padding-top: 8px; 
+    padding-left: 8px; 
+}</string>
+      </property>
+      <property name="text">
+       <string>Aceptar</string>
+      </property>
+     </widget>
+    </item>
+    <item row="0" column="1">
+     <widget class="QPushButton" name="realizado_4">
       <property name="styleSheet">
        <string notr="true">QPushButton {
     background-color: #000000;

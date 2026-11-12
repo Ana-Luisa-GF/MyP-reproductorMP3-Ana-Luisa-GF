@@ -19,6 +19,7 @@ public:
     std::filesystem::path portada;
     int id_album;
     int id_performer;
+    std::filesystem::path portada_artista;
 
     Cancion(const std::filesystem::path& ruta, const std::string& titulo, const std::string& artista, 
             const std::string& genero, const std::string& album, const int& track, const int& anio,
@@ -40,7 +41,7 @@ public:
     void setId(int n){id = n;}
     void setIdAlbum(int n){id_album = n;}
     void setIdPerformer(int n){id_performer = n;}
-
+    void setPortadaArtist(const std::filesystem::path &portada_artista){this->portada_artista = portada_artista;}
 };
 #endif
 

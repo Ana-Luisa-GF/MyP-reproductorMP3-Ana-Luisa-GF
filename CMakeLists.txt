@@ -38,7 +38,14 @@ add_executable(Reproductor
     ${PROJECT_SOURCE_DIR}/src/cambiaralbum.cpp
     ${PROJECT_SOURCE_DIR}/src/cambiaralbum.ui
     ${PROJECT_SOURCE_DIR}/include/cambiaralbum.h
-    include/Album.h
+    ${PROJECT_SOURCE_DIR}/src/cambiarperformer.cpp
+    ${PROJECT_SOURCE_DIR}/src/cambiarperformer.ui
+    ${PROJECT_SOURCE_DIR}/include/cambiarperformer.h
+    ${PROJECT_SOURCE_DIR}/include/Album.h
+    include/Performer.h
+    include/Person.h
+    include/Person.h
+    include/Group.h
 )
 
 target_include_directories(Reproductor PRIVATE

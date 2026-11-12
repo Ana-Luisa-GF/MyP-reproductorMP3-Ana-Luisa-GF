@@ -14,5 +14,8 @@
         <file>iconos/boligrafo.png</file>
         <file>iconos/musica.png</file>
         <file>iconos/album-base.png</file>
+        <file>iconos/artista_base.png</file>
+        <file>iconos/performer.png</file>
+        <file>iconos/grupo.png</file>
     </qresource>
 </RCC>

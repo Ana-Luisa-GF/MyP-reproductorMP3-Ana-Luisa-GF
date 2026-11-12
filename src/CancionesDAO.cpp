@@ -98,6 +98,17 @@ void CancionesDAO::crearBaseDeDatos(){
             sqlite3_close(baseDeDatos);
             exit(1);
         }
+
+        mensajeError = nullptr;
+        consultaSql = "ALTER TABLE performers ADD COLUMN portada TEXT;";
+        mensaje = sqlite3_exec(baseDeDatos, consultaSql.c_str(), 0, 0, &mensajeError);
+
+        if (mensaje != SQLITE_OK) {
+            fprintf(stderr, "Error al crear las tablas: %s\n", mensajeError);
+            sqlite3_free(mensajeError);
+            sqlite3_close(baseDeDatos);
+            exit(1);
+        }
     }
 
 }
@@ -130,7 +141,7 @@ void CancionesDAO::agregarCanciones(const std::vector<Cancion>& listCanciones){
         }
             
 
-        performer = agregarPerformer(cancion.artista);
+        performer = agregarPerformer(cancion.artista,2,cancion.portada_artista);
         if(performer == -1)
             continue;
         album = agregarAlbun(cancion.ruta.parent_path().string(),cancion.album, cancion.portada);
@@ -157,7 +168,7 @@ void CancionesDAO::agregarCanciones(const std::vector<Cancion>& listCanciones){
     sqlite3_finalize(stmtSelect);
 }
 
-int CancionesDAO::agregarPerformer(std::string nombre){
+int CancionesDAO::agregarPerformer(const std::string &nombre, const int &tipo, const std::string &ruta_imagen){
 
     string peticion1 = "SELECT * FROM performers WHERE name = ?";
     sqlite3_stmt* stmtSelect = nullptr;
@@ -174,7 +185,7 @@ int CancionesDAO::agregarPerformer(std::string nombre){
     sqlite3_finalize(stmtSelect);
 
 
-    string peticion2 = "INSERT OR IGNORE INTO performers (id_type, name) VALUES (?, ?);";
+    string peticion2 = "INSERT OR IGNORE INTO performers (id_type, name, portada) VALUES (?, ?, ?);";
     sqlite3_stmt* stmtInsert = nullptr;
 
     if (sqlite3_prepare_v2(baseDeDatos, peticion2.c_str(), -1, &stmtInsert, nullptr) != SQLITE_OK)
@@ -183,6 +194,7 @@ int CancionesDAO::agregarPerformer(std::string nombre){
 
     sqlite3_bind_int(stmtInsert, 1, 2);
     sqlite3_bind_text(stmtInsert, 2, nombre.c_str(), -1, SQLITE_STATIC);
+    sqlite3_bind_text(stmtInsert, 3, ruta_imagen.c_str(), -1, SQLITE_STATIC);
 
     if (sqlite3_step(stmtInsert) != SQLITE_DONE){
         fprintf(stderr, "Error al insertar performer: %s\n", sqlite3_errmsg(baseDeDatos));
@@ -197,7 +209,7 @@ int CancionesDAO::agregarPerformer(std::string nombre){
     return id_performer;
 }
 
-int CancionesDAO::agregarAlbun(std::filesystem::path ruta, std::string nombre, std::string portada){
+int CancionesDAO::agregarAlbun(const std::filesystem::path &ruta, const std::string &nombre, const std::string &portada){
 
     string peticion1 = "SELECT * FROM albums WHERE name = ? AND path = ?";
     sqlite3_stmt* stmtSelect = nullptr;
@@ -395,4 +407,265 @@ std::vector<Album> CancionesDAO::getAlbums(){
     }
     sqlite3_finalize(stmtSelect);
     return albums;
+}
+
+
+
+
+Performer CancionesDAO::getPerofrmer(const int &id){
+    Performer performer;
+    string peticion = "SELECT id_performer, id_type, name, portada FROM performers WHERE id_performer = ?";
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK){
+        return performer;
+    }
+
+    sqlite3_bind_int(stmtSelect, 1, id);
+
+    if(sqlite3_step(stmtSelect) == SQLITE_ROW){
+        int id = sqlite3_column_int(stmtSelect, 0);
+
+        int id_type = sqlite3_column_int(stmtSelect, 0);
+
+        const unsigned char* namePtr = sqlite3_column_text(stmtSelect, 2);
+        std::string nombre = namePtr ? reinterpret_cast<const char*>(namePtr) : "";
+
+        const unsigned char* portadaPtr = sqlite3_column_text(stmtSelect, 4);
+        std::string portada = portadaPtr ? reinterpret_cast<const char*>(portadaPtr) : "";
+
+        sqlite3_finalize(stmtSelect);
+        return Performer(id,id_type,nombre,portada,true);
+    }
+    sqlite3_finalize(stmtSelect);
+    return performer;
+}
+
+
+bool CancionesDAO::modificarColumna_performer(const int &id, const std::string &columna,const int &id_type, const std::string &nombre){
+    if (columna != "name" && columna != "id_type")
+        return false;
+
+    std::string peticion = "UPDATE performers SET " + columna + " = ? WHERE id_performer = ?";
+
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return false;
+
+    if(columna == "name")
+        sqlite3_bind_text(stmtSelect, 1, nombre.c_str(), -1, SQLITE_TRANSIENT);
+    else
+        sqlite3_bind_int(stmtSelect, 1, id_type);
+
+    sqlite3_bind_int(stmtSelect, 2, id);
+
+    bool exito = (sqlite3_step(stmtSelect) == SQLITE_DONE);
+
+    sqlite3_finalize(stmtSelect);
+    return exito;
+}
+
+std::vector<Performer> CancionesDAO::getPerformers(){
+    vector<Performer> performers;
+    std::string peticion = "SELECT id_performer, id_type, name, portada FROM performers;";
+
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return performers;
+
+
+    while(sqlite3_step(stmtSelect) == SQLITE_ROW){
+
+        int id = sqlite3_column_int(stmtSelect, 0);
+        int id_type = sqlite3_column_int(stmtSelect, 1);
+
+        const unsigned char* c_nombre = sqlite3_column_text(stmtSelect, 2);
+        std::string nombre = c_nombre ? reinterpret_cast<const char*>(c_nombre) : "";
+
+        const unsigned char* c_portada = sqlite3_column_text(stmtSelect, 4);
+        std::string portada = c_portada ? reinterpret_cast<const char*>(c_portada) : "";
+
+        Performer per(id, id_type, nombre, portada, true);
+
+        performers.push_back(per);
+    }
+    sqlite3_finalize(stmtSelect);
+    return performers;
+}
+
+int CancionesDAO::agregarPerson(const std::string &nombre){
+    string peticion1 = "SELECT * FROM persons WHERE stage_name = ?";
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion1.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return -1;
+
+    sqlite3_bind_text(stmtSelect, 1, nombre.c_str(), -1, SQLITE_TRANSIENT);
+    if(sqlite3_step(stmtSelect) == SQLITE_ROW){
+        int id_person = sqlite3_column_int(stmtSelect, 0);
+        sqlite3_finalize(stmtSelect);
+        return id_person;
+    }
+
+    sqlite3_finalize(stmtSelect);
+
+
+    string peticion2 = "INSERT OR IGNORE INTO persons (stage_name) VALUES (?);";
+    sqlite3_stmt* stmtInsert = nullptr;
+
+    if (sqlite3_prepare_v2(baseDeDatos, peticion2.c_str(), -1, &stmtInsert, nullptr) != SQLITE_OK)
+        return -1;
+
+    sqlite3_bind_text(stmtInsert, 1, nombre.c_str(), -1, SQLITE_STATIC);
+
+    if (sqlite3_step(stmtInsert) != SQLITE_DONE){
+        fprintf(stderr, "Error al insertar person: %s\n", sqlite3_errmsg(baseDeDatos));
+        sqlite3_finalize(stmtInsert);
+        return -1;
+    }
+
+    int id_person = static_cast<int>(sqlite3_last_insert_rowid(baseDeDatos));
+
+    sqlite3_finalize(stmtInsert);
+
+    return id_person;
+}
+
+bool CancionesDAO::modificarColumna_person(const int &id, const std::string &columna,const std::string &nuevoValor){
+    if (columna != "stage_name" && columna != "real_name" && columna != "birth_date" && columna != "death_date")
+        return false;
+
+    std::string peticion = "UPDATE persons SET " + columna + " = ? WHERE id_person = ?";
+
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return false;
+
+    sqlite3_bind_text(stmtSelect, 1, nuevoValor.c_str(), -1, SQLITE_TRANSIENT);
+
+    sqlite3_bind_int(stmtSelect, 2, id);
+
+    bool exito = (sqlite3_step(stmtSelect) == SQLITE_DONE);
+
+    sqlite3_finalize(stmtSelect);
+    return exito;
+}
+
+Person CancionesDAO::getPerson(const std::string &nombre){
+    Person person;
+    string peticion = "SELECT id_person, stage_name, real_name, birth_date, death_date FROM persons WHERE stage_name = ?";
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK){
+        return person;
+    }
+
+    sqlite3_bind_text(stmtSelect, 1, nombre.c_str(), -1, SQLITE_TRANSIENT);
+
+    if(sqlite3_step(stmtSelect) == SQLITE_ROW){
+
+        int id_person = sqlite3_column_int(stmtSelect, 0);
+
+        const unsigned char* stage_namePtr = sqlite3_column_text(stmtSelect, 1);
+        std::string stage_name = stage_namePtr ? reinterpret_cast<const char*>(stage_namePtr) : "";
+
+        const unsigned char* real_namePtr = sqlite3_column_text(stmtSelect, 2);
+        std::string real_name = real_namePtr ? reinterpret_cast<const char*>(real_namePtr) : "";
+
+        const unsigned char* birth_datePtr = sqlite3_column_text(stmtSelect, 3);
+        std::string birth_date = birth_datePtr ? reinterpret_cast<const char*>(birth_datePtr) : "";
+
+        const unsigned char* death_datePtr = sqlite3_column_text(stmtSelect, 4);
+        std::string death_date = death_datePtr ? reinterpret_cast<const char*>(death_datePtr) : "";
+
+        sqlite3_finalize(stmtSelect);
+        return Person(id_person, stage_name, real_name, birth_date, death_date, true);
+    }
+    sqlite3_finalize(stmtSelect);
+    return person;
+}
+
+
+int CancionesDAO::agregarGrupo(const std::string &nombre){
+    string peticion1 = "SELECT * FROM groups WHERE name = ?";
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion1.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return -1;
+
+    sqlite3_bind_text(stmtSelect, 1, nombre.c_str(), -1, SQLITE_TRANSIENT);
+    if(sqlite3_step(stmtSelect) == SQLITE_ROW){
+        int id_group = sqlite3_column_int(stmtSelect, 0);
+        sqlite3_finalize(stmtSelect);
+        return id_group;
+    }
+
+    sqlite3_finalize(stmtSelect);
+
+
+    string peticion2 = "INSERT OR IGNORE INTO groups (name) VALUES (?);";
+    sqlite3_stmt* stmtInsert = nullptr;
+
+    if (sqlite3_prepare_v2(baseDeDatos, peticion2.c_str(), -1, &stmtInsert, nullptr) != SQLITE_OK)
+        return -1;
+
+    sqlite3_bind_text(stmtInsert, 1, nombre.c_str(), -1, SQLITE_STATIC);
+
+    if (sqlite3_step(stmtInsert) != SQLITE_DONE){
+        fprintf(stderr, "Error al insertar grupo: %s\n", sqlite3_errmsg(baseDeDatos));
+        sqlite3_finalize(stmtInsert);
+        return -1;
+    }
+
+    int id_group = static_cast<int>(sqlite3_last_insert_rowid(baseDeDatos));
+
+    sqlite3_finalize(stmtInsert);
+
+    return id_group;
+}
+
+bool CancionesDAO::modificarColumna_goup(const int &id, const std::string &columna,const std::string &nuevoValor){
+    if (columna != "name" && columna != "start_date" && columna != "end_date")
+        return false;
+
+    std::string peticion = "UPDATE groups SET " + columna + " = ? WHERE id_group = ?";
+
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return false;
+
+    sqlite3_bind_text(stmtSelect, 1, nuevoValor.c_str(), -1, SQLITE_TRANSIENT);
+
+    sqlite3_bind_int(stmtSelect, 2, id);
+
+    bool exito = (sqlite3_step(stmtSelect) == SQLITE_DONE);
+
+    sqlite3_finalize(stmtSelect);
+    return exito;
+}
+
+Group CancionesDAO::getGroup(const std::string &nombre){
+    Group grupo;
+    string peticion = "SELECT id_group, name, start_date, end_date FROM groups WHERE name = ?";
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK){
+        return grupo;
+    }
+
+    sqlite3_bind_text(stmtSelect, 1, nombre.c_str(), -1, SQLITE_TRANSIENT);
+
+    if(sqlite3_step(stmtSelect) == SQLITE_ROW){
+
+        int id_group = sqlite3_column_int(stmtSelect, 0);
+
+        const unsigned char* namePtr = sqlite3_column_text(stmtSelect, 1);
+        std::string name = namePtr ? reinterpret_cast<const char*>(namePtr) : "";
+
+        const unsigned char* start_datePtr = sqlite3_column_text(stmtSelect, 2);
+        std::string start_date = start_datePtr ? reinterpret_cast<const char*>(start_datePtr) : "";
+
+        const unsigned char* end_datePtr = sqlite3_column_text(stmtSelect, 3);
+        std::string end_date = end_datePtr ? reinterpret_cast<const char*>(end_datePtr) : "";
+
+        sqlite3_finalize(stmtSelect);
+        return Group(id_group,name,start_date,end_date,true);
+    }
+    sqlite3_finalize(stmtSelect);
+    return grupo;
 }

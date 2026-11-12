@@ -29,6 +29,6 @@ public:
     vector<Cancion> getArchivosMP3();
     Cancion leerEtiquetas(const path& archivoMp3);
     void recorrerArchivos();
-    path guardarImagen(const TagLib::ByteVector& datosImagen, path rutaCancion);
+    path guardarImagen(const TagLib::ByteVector& datosImagen, const path &rutaCancion, const std::string &tipo_imagen);
 };
 #endif

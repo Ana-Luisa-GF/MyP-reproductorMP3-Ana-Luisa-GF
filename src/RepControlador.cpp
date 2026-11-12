@@ -49,3 +49,37 @@ std::vector<Album> RepControlador::getAlbums(){
     return dao.getAlbums();
 }
 
+Performer RepControlador::getPerformer(const int &id){
+    return dao.getPerofrmer(id);
+}
+
+std::vector<Performer> RepControlador::getPerformers(){
+    return dao.getPerformers();
+}
+
+
+int RepControlador::agregarPerson(const std::string &nombre){
+    return dao.agregarPerson(nombre);
+}
+bool RepControlador::modificarColumna_person(const int &id, const std::string &columna,const std::string &nuevoValor){
+    return dao.modificarColumna_person(id,columna,nuevoValor);
+}
+Person RepControlador::getPerson(const std::string &nombre){
+    return dao.getPerson(nombre);
+}
+
+int RepControlador::agregarGrupo(const std::string &nombre){
+    return dao.agregarGrupo(nombre);
+}
+
+bool RepControlador::modificarColumna_goup(const int &id, const std::string &columna,const std::string &nuevoValor){
+    return dao.modificarColumna_goup(id,columna,nuevoValor);
+}
+
+Group RepControlador::getGroup(const std::string &nombre){
+    return dao.getGroup(nombre);
+}
+
+bool RepControlador::definirTipoPerformer(const int &id, const int &nuevoTipo){
+    return dao.modificarColumna_performer(id,"id_type",nuevoTipo,"");
+}

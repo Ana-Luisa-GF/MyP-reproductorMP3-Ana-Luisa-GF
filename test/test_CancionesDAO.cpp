@@ -40,7 +40,7 @@ TEST(DAO_Test, AgregarPerformer) {
     CancionesDAO dao(true);
     dao.crearBaseDeDatos();
     std::string nombre = "performer";
-    dao.agregarPerformer(nombre);
+    dao.agregarPerformer(nombre,2,nombre);
 
     sqlite3_stmt* stmt = nullptr;
     std::string consulta = "SELECT * FROM performers WHERE name = ?;";

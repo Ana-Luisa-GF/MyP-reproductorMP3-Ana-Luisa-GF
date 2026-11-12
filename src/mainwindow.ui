@@ -31,7 +31,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QListWidget" name="listWidget">
@@ -741,6 +741,396 @@ QPushButton:pressed {
        <property name="text">
         <string>Editar datos del Album</string>
        </property>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_3">
+     <widget class="QListWidget" name="listWidget_performers">
+      <property name="geometry">
+       <rect>
+        <x>400</x>
+        <y>20</y>
+        <width>691</width>
+        <height>571</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QFrame" name="reprod_3">
+      <property name="geometry">
+       <rect>
+        <x>30</x>
+        <y>10</y>
+        <width>351</width>
+        <height>581</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border: 2px solid #3498db;
+
+border-radius: 10px;</string>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <widget class="QLabel" name="pantalla_performer">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>20</y>
+         <width>311</width>
+         <height>231</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">ui-&gt;label-&gt;setAutoFillBackground(true);
+ui-&gt;label-&gt;setStyleSheet(&quot;background-color: yellow;&quot;);</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QStackedWidget" name="stackedWidget_performer">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>260</y>
+         <width>351</width>
+         <height>321</height>
+        </rect>
+       </property>
+       <property name="currentIndex">
+        <number>2</number>
+       </property>
+       <widget class="QWidget" name="page_4">
+        <widget class="QPushButton" name="editButton_performer">
+         <property name="geometry">
+          <rect>
+           <x>70</x>
+           <y>150</y>
+           <width>201</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border-radius: 15px; 
+    border: 1px solid #444444;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #3c3c3c, 
+                                      stop:0.5 #2b2b2b, 
+                                      stop:1.0 #222222);
+    padding: 5px; 
+    color: #ffffff; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9; 
+    color: #ffffff;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d; 
+    color: #ffffff;
+    padding-top: 8px; 
+    padding-left: 8px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Editar datos del Performer</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="caja_performer">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>50</y>
+           <width>321</width>
+           <height>81</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Nombre: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_5">
+        <widget class="QLabel" name="caja_fechaMuerte_person">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>190</y>
+           <width>321</width>
+           <height>49</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Fecha muerte: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="caja_nombreArt_person">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>27</y>
+           <width>321</width>
+           <height>49</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Nombre art:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="caja_fechaCumple_person">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>136</y>
+           <width>321</width>
+           <height>49</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Fecha cumpleaños:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="caja_nombreReal_person">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>82</y>
+           <width>321</width>
+           <height>49</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Nombre real: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="editButton_person">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>250</y>
+           <width>191</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border-radius: 15px; 
+    border: 1px solid #444444;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #3c3c3c, 
+                                      stop:0.5 #2b2b2b, 
+                                      stop:1.0 #222222);
+    padding: 5px; 
+    color: #ffffff; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9; 
+    color: #ffffff;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d; 
+    color: #ffffff;
+    padding-top: 8px; 
+    padding-left: 8px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Editar datos del Artista</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="page_6">
+        <widget class="QPushButton" name="editButton_grupo">
+         <property name="geometry">
+          <rect>
+           <x>90</x>
+           <y>248</y>
+           <width>191</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    border-radius: 15px; 
+    border: 1px solid #444444;
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,
+                                      stop:0 #3c3c3c, 
+                                      stop:0.5 #2b2b2b, 
+                                      stop:1.0 #222222);
+    padding: 5px; 
+    color: #ffffff; 
+}
+
+QPushButton:hover {
+    background-color: #2980b9; 
+    color: #ffffff;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d; 
+    color: #ffffff;
+    padding-top: 8px; 
+    padding-left: 8px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Editar datos del grupo</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="caja_nombre_grupo">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>25</y>
+           <width>321</width>
+           <height>49</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Nombre:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="caja_fechaDis_grupo">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>134</y>
+           <width>321</width>
+           <height>49</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Fecha disolución: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="caja_fechaCrea_grupo">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>80</y>
+           <width>321</width>
+           <height>49</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}</string>
+         </property>
+         <property name="text">
+          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:10pt; color:#b0b0b0;&quot;&gt;Fecha creación: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="editButton_integrantes_grupo">
+         <property name="geometry">
+          <rect>
+           <x>20</x>
+           <y>190</y>
+           <width>311</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+        background-color: #2b2b2b;
+    border: 1px solid #444444;
+    border-radius: 20px;
+    padding-left: 14px;
+    color: #ffffff;
+}
+
+QPushButton:hover {
+    background-color: #2980b9; 
+    color: #ffffff;
+}
+
+QPushButton:pressed {
+    background-color: #1f618d; 
+    color: #ffffff;
+    padding-top: 8px; 
+    padding-left: 8px;
+}</string>
+         </property>
+         <property name="text">
+          <string>Integrantes del grupo</string>
+         </property>
+        </widget>
+       </widget>
       </widget>
      </widget>
     </widget>
