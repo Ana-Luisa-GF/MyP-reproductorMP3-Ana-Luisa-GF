@@ -9,6 +9,7 @@
 #include "Performer.h"
 #include "Person.h"
 #include "Group.h"
+#include "TraductorBusquedas.h"
 
 class CancionesDAO{
  
@@ -52,5 +53,9 @@ public:
 
     bool agregarPersonAGrupo(const int &id_person, const int &id_group);
     bool eliminarPersonDeGrupo(const int &id_person, const int &id_group);
+
+    std::vector<Cancion> buscarCancionesFiltros(const TraductorBusquedas& filtros);
+    std::vector<Performer> buscarPerformersFiltros(const TraductorBusquedas& filtros);
+    std::vector<Album> buscarAlbumsFiltros(const TraductorBusquedas& filtros);
 };
 #endif

@@ -5,6 +5,7 @@
 #include <iostream>
 #include "mainwindow.h"
 #include "RepControlador.h"
+#include "TraductorBusquedas.h"
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
@@ -13,12 +14,15 @@ int main(int argc, char* argv[]) {
     cancionesDAO.crearBaseDeDatos();
     Minero minero(cancionesDAO);
 
-    RepControlador controlador(minero,cancionesDAO);
+    TraductorBusquedas trad;
+
+    RepControlador controlador(minero,cancionesDAO,trad);
 
     std::string ruta;
     std::cout<<"El progrma hace las cosas hasta aqui"<<endl;
 
     MainWindow w(&controlador);
+    controlador.setVista(&w);
     w.cargarListaCanciones(controlador.getCanciones());
     w.show();
 

@@ -19,9 +19,9 @@ MainWindow::MainWindow(RepControlador *ctrl, QWidget *parent)
 {
     ui->setupUi(this);
 
-    QLineEdit *barraBusqueda = new QLineEdit(this);
+    barraBusqueda = new QLineEdit(this);
     barraBusqueda->setPlaceholderText("Buscar...");
-    barraBusqueda->setFixedSize(750, 35);
+    barraBusqueda->setFixedSize(675, 35);
     barraBusqueda->setStyleSheet(
         "QLineEdit {"
         "   font-size: 14px;"
@@ -33,10 +33,16 @@ MainWindow::MainWindow(RepControlador *ctrl, QWidget *parent)
     ui->mainToolBar->addWidget(barraBusqueda);
     ui->mainToolBar->setIconSize(QSize(45, 45));
 
+    connect(barraBusqueda, &QLineEdit::returnPressed, this, [this]() {
+    this->ejecutarBusqueda(barraBusqueda->text());
+    });
+
+
     std::vector<Album> albums = controlador->getAlbums();
     cargarListaAlbums(albums);
     std::vector<Performer> performers = controlador->getPerformers();
     cargarListaPerformers(performers);
+    setListas(controlador->getCanciones(), albums, performers);
 }
 
 MainWindow::~MainWindow()
@@ -44,22 +50,10 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_actionAgregar_Artista_triggered()
-{
-
-}
-
-
 void MainWindow::on_actionMinar_triggered()
 {
     QString ruta = QInputDialog::getText(this, "Directorio","Ingrese la ruta del directorio a minar. ");
     controlador->minar(ruta.toStdString());
-    //rolas = controlador->getCanciones();
-    //cargarListaCanciones(rolas);
-    //std::vector<Album> albums = controlador->getAlbums();
-    //cargarListaAlbums(albums);
-    //std::vector<Performer> performers = controlador->getPerformers();
-    //cargarListaPerformers(performers);
     refrescar();
 
 }
@@ -151,27 +145,49 @@ void MainWindow::cancionClickeada(const Cancion& cancion)
 
 }
 
+void MainWindow::setListas(std::vector<Cancion> r, std::vector<Album> a, std::vector<Performer> p){
+    rolas = r;
+    albums = a;
+    performers = p;
+}
+
 void MainWindow::refrescar(){
-    rolas = controlador->getCanciones();
-    cargarListaCanciones(rolas);
-    Cancion c;
+    cargarListaCanciones(controlador->getCanciones());
+
     for(const Cancion &rola : rolas)
         if(rola.id == cancion_selec.id)
-            cancion_selec = rola;
-    cancionClickeada(cancion_selec);
-    std::vector<Album> albums = controlador->getAlbums();
+            cancionClickeada(rola);
+
+    cargarListaAlbums(controlador->getAlbums());
+
+    if(album_selec.album_valido)
+        album_selec = controlador->getAlbum(album_selec.id);
+    albumClickeado(album_selec);
+
+    cargarListaPerformers(controlador->getPerformers());
+
+    if(performer_selec.performer_valido)
+        performer_selec = controlador->getPerformer(performer_selec.id);
+    performerClickeado(performer_selec);
+}
+
+void MainWindow::refrescar_busqueda(){
+    cargarListaCanciones(rolas);
+
+    for(const Cancion &rola : rolas)
+        if(rola.id == cancion_selec.id)
+    cancionClickeada(rola);
+
     cargarListaAlbums(albums);
 
     if(album_selec.album_valido)
     album_selec = controlador->getAlbum(album_selec.id);
-
     albumClickeado(album_selec);
 
-    std::vector<Performer> performers = controlador->getPerformers();
     cargarListaPerformers(performers);
 
     if(performer_selec.performer_valido)
-        performer_selec = controlador->getPerformer(performer_selec.id);
+    performer_selec = controlador->getPerformer(performer_selec.id);
     performerClickeado(performer_selec);
 }
 
@@ -186,7 +202,10 @@ void MainWindow::on_editButton_titulo_clicked()
     if(ventana_titulo.exec() == QDialog::Accepted){
         if(!controlador->modificarTitulo(cancion_selec.id,ventana_titulo.getResultado().toStdString()))
             QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
-        refrescar();
+        if(busqueda_valida)
+            ejecutarBusqueda(busqueda);
+        else
+            refrescar();
     }
 }
 
@@ -236,7 +255,10 @@ void MainWindow::modificarAlbum(const int &boton){
         if(!controlador->mofificarAlbum(album.id,"year",ventana.getNuenoAnio(),ventana.getNuevoAlbum().toStdString()))
             QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
 
-        refrescar();
+        if(busqueda_valida)
+            ejecutarBusqueda(busqueda);
+        else
+            refrescar();
     }
 }
 
@@ -258,7 +280,10 @@ void MainWindow::on_editButton_genero_clicked()
     if(ventana_titulo.exec() == QDialog::Accepted && !cancion_selec.ruta.empty()){
         if(!controlador->modificarGenero(cancion_selec.id,ventana_titulo.getResultado().toStdString()))
             QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
-        refrescar();
+        if(busqueda_valida)
+            ejecutarBusqueda(busqueda);
+        else
+            refrescar();
     }
 }
 
@@ -287,7 +312,10 @@ void MainWindow::on_editButton_anio_clicked()
         if(!controlador->modificarAnio(cancion_selec.id,ventana_titulo.getResultado().toStdString()))
             QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
 
-        refrescar();
+        if(busqueda_valida)
+            ejecutarBusqueda(busqueda);
+        else
+            refrescar();
     }
 }
 
@@ -313,7 +341,10 @@ void MainWindow::on_editButton_track_clicked()
 
         if(!controlador->modificarTrack(cancion_selec.id,ventana_titulo.getResultado().toStdString()))
             QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
-        refrescar();
+        if(busqueda_valida)
+            ejecutarBusqueda(busqueda);
+        else
+            refrescar();
     }
 }
 
@@ -513,41 +544,42 @@ void MainWindow::diseñoVentanaPerformer(const int &tipo_performer){
             return;
 
         }else{
+            if(tipo_performer == 1){
+                grupo_selec = controlador->getGroup(performer_selec.nombre);
 
-            grupo_selec = controlador->getGroup(performer_selec.nombre);
+                if(!grupo_selec.grupo_valido)
+                    QMessageBox::critical(this, "Error", "No obtuvimos un grupo valido.");
 
-            if(!grupo_selec.grupo_valido)
-                QMessageBox::critical(this, "Error", "No obtuvimos un grupo valido.");
+                ui->stackedWidget_performer->setCurrentIndex(2);
+                int anchoDisponible = 261 - 75;
 
-            ui->stackedWidget_performer->setCurrentIndex(2);
-            int anchoDisponible = 261 - 75;
+                QFontMetrics metrics1(ui->caja_nombre_grupo->font());
+                QString nombre = QString::fromStdString(grupo_selec.name);
+                QString nombre_cortado = metrics1.elidedText(nombre, Qt::ElideRight, anchoDisponible);
 
-            QFontMetrics metrics1(ui->caja_nombre_grupo->font());
-            QString nombre = QString::fromStdString(grupo_selec.name);
-            QString nombre_cortado = metrics1.elidedText(nombre, Qt::ElideRight, anchoDisponible);
+                ui->caja_nombre_grupo->setText(
+                    "<span style='color: #b0b0b0; font-size: 11pt; font-weight: normal;'>Nombre: </span>"
+                    "<span style='color: #ffffff; font-size: 12pt; font-weight: bold;'>" + nombre_cortado + "</span>"
+                    );
 
-            ui->caja_nombre_grupo->setText(
-                "<span style='color: #b0b0b0; font-size: 11pt; font-weight: normal;'>Nombre: </span>"
-                "<span style='color: #ffffff; font-size: 12pt; font-weight: bold;'>" + nombre_cortado + "</span>"
-                );
+                QFontMetrics metrics2(ui->caja_fechaCrea_grupo->font());
+                QString fechaCrea = QString::fromStdString(grupo_selec.start_date);
+                QString fechaCrea_cortado = metrics2.elidedText(fechaCrea, Qt::ElideRight, anchoDisponible);
 
-            QFontMetrics metrics2(ui->caja_fechaCrea_grupo->font());
-            QString fechaCrea = QString::fromStdString(grupo_selec.start_date);
-            QString fechaCrea_cortado = metrics2.elidedText(fechaCrea, Qt::ElideRight, anchoDisponible);
+                ui->caja_fechaCrea_grupo->setText(
+                    "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Fecha creación: </span>"
+                    "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + fechaCrea_cortado + "</span>"
+                    );
 
-            ui->caja_fechaCrea_grupo->setText(
-                "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Fecha creación: </span>"
-                "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + fechaCrea_cortado + "</span>"
-                );
+                QFontMetrics metrics3(ui->caja_fechaDis_grupo->font());
+                QString fechaDis = QString::fromStdString(grupo_selec.end_date);
+                QString fechaDis_cortado = metrics3.elidedText(fechaDis, Qt::ElideRight, anchoDisponible);
 
-            QFontMetrics metrics3(ui->caja_fechaDis_grupo->font());
-            QString fechaDis = QString::fromStdString(grupo_selec.end_date);
-            QString fechaDis_cortado = metrics3.elidedText(fechaDis, Qt::ElideRight, anchoDisponible);
-
-            ui->caja_fechaDis_grupo->setText(
-                "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Fecha disolución: </span>"
-                "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + fechaDis_cortado + "</span>"
-                );
+                ui->caja_fechaDis_grupo->setText(
+                    "<span style='color: #b0b0b0; font-size: 10pt; font-weight: normal;'>Fecha disolución: </span>"
+                    "<span style='color: #ffffff; font-size: 11pt; font-weight: bold;'>" + fechaDis_cortado + "</span>"
+                    );
+            }
         }
     }
 
@@ -567,7 +599,10 @@ void MainWindow::on_editButton_performer_clicked()
         }else{
             controlador->agregarGrupo(performer_selec.nombre);
         }
-        refrescar();
+        if(busqueda_valida)
+            ejecutarBusqueda(busqueda);
+        else
+            refrescar();
     }
 }
 
@@ -591,7 +626,10 @@ void MainWindow::on_editButton_person_clicked()
                 QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
         performer_selec = controlador->getPerformer(performer_selec.id);
         performerClickeado(performer_selec);
-        refrescar();
+        if(busqueda_valida)
+            ejecutarBusqueda(busqueda);
+        else
+            refrescar();
     }
 }
 
@@ -614,7 +652,10 @@ void MainWindow::on_editButton_grupo_clicked()
                 QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
         performer_selec = controlador->getPerformer(performer_selec.id);
         performerClickeado(performer_selec);
-        refrescar();
+        if(busqueda_valida)
+            ejecutarBusqueda(busqueda);
+        else
+            refrescar();
     }
 }
 
@@ -643,11 +684,69 @@ void MainWindow::on_editButton_integrantes_grupo_clicked()
                     QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
         }else{
             if(ventana.getNuevoArtista())
-                refrescar();
+                if(busqueda_valida)
+                    ejecutarBusqueda(busqueda);
+                else
+                    refrescar();
             else
                 if(!controlador->agregarPersonAGrupo(ventana.getIdArtista(), grupo_selec.id))
                 QMessageBox::critical(this,"Error","Algo salio mal al comunicarse con la base de datos.");
         }
-        refrescar();
+
+        if(busqueda_valida){
+            ejecutarBusqueda(busqueda);
+        }else{
+            refrescar();
+        }
     }
+}
+
+void MainWindow::nuevoArtista(const QString &nombre){
+    int id_perf = controlador->agregarPerformer(nombre.toStdString(),0);;
+    controlador->modificarColumna_performer(id_perf,"id_type",0,"");
+    controlador->agregarPerson(nombre.toStdString());
+    if(busqueda_valida)
+        ejecutarBusqueda(busqueda);
+    else
+        refrescar();
+}
+
+void MainWindow::nuevoGrupo(const QString &nombre){
+    int id_perf = controlador->agregarPerformer(nombre.toStdString(),1);
+    controlador->modificarColumna_performer(id_perf,"id_type",1,"");
+    controlador->agregarGrupo(nombre.toStdString());
+    if(busqueda_valida)
+        ejecutarBusqueda(busqueda);
+    else
+        refrescar();
+}
+
+void MainWindow::on_actionAgregar_Artista_triggered()
+{
+    CambiarTitulo ventana("Nuevo artista","");
+    ventana.setModal(true);
+    if(ventana.exec() == QDialog::Accepted){
+        if(!ventana.getResultado().isEmpty())
+            nuevoArtista(ventana.getResultado());
+    }
+}
+
+
+void MainWindow::on_actionAgregar_GRupo_triggered()
+{
+    CambiarTitulo ventana("Nuevo grupo","");
+    ventana.setModal(true);
+    if(ventana.exec() == QDialog::Accepted){
+        if(!ventana.getResultado().isEmpty())
+            nuevoGrupo(ventana.getResultado());
+    }
+}
+
+void MainWindow::ejecutarBusqueda(const QString &texto) {
+    busqueda = texto;
+    controlador->busqueda(texto.toStdString());
+}
+
+void MainWindow::busquedaInvalida(){
+    QMessageBox::critical(this,"Error de busqueda","Los argumentos de la busqueda no son correctos.");
 }

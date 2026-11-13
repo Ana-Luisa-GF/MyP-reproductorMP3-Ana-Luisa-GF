@@ -55,6 +55,8 @@ add_executable(Reproductor
     ${PROJECT_SOURCE_DIR}/include/grupointegrantes.h
     ${PROJECT_SOURCE_DIR}/src/grupointegrantes.cpp
     ${PROJECT_SOURCE_DIR}/src/grupointegrantes.ui
+    ${PROJECT_SOURCE_DIR}/include/TraductorBusquedas.h
+    ${PROJECT_SOURCE_DIR}/src/TraductorBusquedas.cpp
 )
 
 target_include_directories(Reproductor PRIVATE

@@ -31,7 +31,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QListWidget" name="listWidget">
@@ -802,7 +802,7 @@ ui-&gt;label-&gt;setStyleSheet(&quot;background-color: yellow;&quot;);</string>
         </rect>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="page_4">
         <widget class="QPushButton" name="editButton_performer">
@@ -1187,6 +1187,7 @@ QPushButton:pressed {
    <addaction name="actionMusica"/>
    <addaction name="actionAlbums"/>
    <addaction name="actionPerformers"/>
+   <addaction name="actionayuda"/>
   </widget>
   <action name="actionMinar">
    <property name="icon">
@@ -1240,6 +1241,15 @@ QPushButton:pressed {
    </property>
    <property name="text">
     <string>Performers</string>
+   </property>
+  </action>
+  <action name="actionayuda">
+   <property name="icon">
+    <iconset resource="../iconos.qrc">
+     <normaloff>:/iconos/ayuda.png</normaloff>:/iconos/ayuda.png</iconset>
+   </property>
+   <property name="text">
+    <string>ayuda</string>
    </property>
   </action>
  </widget>

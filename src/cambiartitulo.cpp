@@ -27,6 +27,14 @@ CambiarTitulo::CambiarTitulo(const QString &titulo_ventana, const QString &titul
         ui->label->setText("<html><head/><body><p align='center'><span style='font-size:10pt; "
                           "font-weight:700; color:#1E90FF;'>EDITAR AÑO DE SALIDA:</span></p></body></html>");
 
+   if(titulo_ventana == "Nuevo artista")
+       ui->label->setText("<html><head/><body><p align='center'><span style='font-size:10pt; "
+                          "font-weight:700; color:#1E90FF;'>NOMBRE DEL NUEVO ARTISTA:</span></p></body></html>");
+
+   if(titulo_ventana == "Nuevo grupo")
+       ui->label->setText("<html><head/><body><p align='center'><span style='font-size:10pt; "
+                          "font-weight:700; color:#1E90FF;'>NOMBRE DEL NUEVO GRUPO:</span></p></body></html>");
+
 }
 
 CambiarTitulo::~CambiarTitulo()

@@ -2,9 +2,10 @@
 #include "Cancion.h"
 #include "mainwindow.h"
 
-RepControlador::RepControlador(Minero& m, CancionesDAO& daoRef) :
+RepControlador::RepControlador(Minero& m, CancionesDAO& daoRef,TraductorBusquedas &tr) :
     minero(m),
     dao(daoRef),
+    trad(tr),
     vista(nullptr){}
 
 
@@ -100,4 +101,27 @@ bool RepControlador::agregarPersonAGrupo(const int &id_person, const int &id_gro
 }
 bool RepControlador::eliminarPersonDeGrupo(const int &id_person, const int &id_group){
     return dao.eliminarPersonDeGrupo(id_person,id_group);
+}
+
+int RepControlador::agregarPerformer(const std::string &nombre, const int &tipo){
+    return dao.agregarPerformer(nombre,tipo,"");
+}
+
+
+void RepControlador::busqueda(const std::string &busqueda){
+    trad.getTokens(busqueda);
+    if(!trad.determinarTokens()){
+        vista->busquedaInvalida();
+        vista->setBusqueda_valida(false);
+        trad.limpiar();
+        return;
+    }
+
+    std::vector<Cancion> rolas = dao.buscarCancionesFiltros(trad);
+    std::vector<Album> albums = dao.buscarAlbumsFiltros(trad);
+    std::vector<Performer> performers = dao.buscarPerformersFiltros(trad);
+    trad.limpiar();
+    vista->setListas(rolas, albums, performers);
+    vista->setBusqueda_valida(true);
+    vista->refrescar_busqueda();
 }

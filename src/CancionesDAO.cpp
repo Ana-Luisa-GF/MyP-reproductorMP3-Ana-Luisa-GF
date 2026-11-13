@@ -482,7 +482,7 @@ std::vector<Performer> CancionesDAO::getPerformers(){
         const unsigned char* c_nombre = sqlite3_column_text(stmtSelect, 2);
         std::string nombre = c_nombre ? reinterpret_cast<const char*>(c_nombre) : "";
 
-        const unsigned char* c_portada = sqlite3_column_text(stmtSelect, 4);
+        const unsigned char* c_portada = sqlite3_column_text(stmtSelect, 3);
         std::string portada = c_portada ? reinterpret_cast<const char*>(c_portada) : "";
 
         Performer per(id, id_type, nombre, portada, true);
@@ -776,4 +776,232 @@ std::vector<Person> CancionesDAO::getPersons(){
     }
     sqlite3_finalize(stmtSelect);
     return artistas;
+}
+
+std::vector<Cancion> CancionesDAO::buscarCancionesFiltros(const TraductorBusquedas& filtros){
+    std::vector<Cancion> resultado;
+
+    std::vector<std::string> valores;
+    std::vector<bool> esAnio;
+    std::string peticion = "SELECT r.path, r.title, r.track, r.year, r.genre, r.portada, p.name, a.name, r.id_rola, a.id_album, r.id_performer "
+                      "FROM rolas r "
+                      "JOIN performers p ON r.id_performer = p.id_performer "
+                      "JOIN albums a ON r.id_album = a.id_album "
+                      "WHERE 1=1";
+
+    if(!filtros.album.empty()){
+        if(filtros.bAlbum)
+            peticion += " AND a.name LIKE ?";
+        else
+            peticion += " AND a.name NOT LIKE ?";
+        valores.push_back("%" + filtros.album + "%");
+        esAnio.push_back(false);
+    }
+    if(!filtros.performer.empty()){
+        if(filtros.bPerformer)
+            peticion += " AND p.name LIKE ?";
+        else
+            peticion += " AND p.name NOT LIKE ?";
+        valores.push_back("%" + filtros.performer + "%");
+        esAnio.push_back(false);
+    }
+    if(!filtros.cancion.empty()){
+        if(filtros.bCancion)
+            peticion += " AND r.title LIKE ?";
+        else
+            peticion += " AND r.title NOT LIKE ?";
+        valores.push_back("%" + filtros.cancion + "%");
+        esAnio.push_back(false);
+    }
+    if(!filtros.genero.empty()){
+        if(filtros.bGenero)
+            peticion += " AND r.genre LIKE ?";
+        else
+            peticion += " AND r.genre NOT LIKE ?";
+        valores.push_back("%" + filtros.genero + "%");
+        esAnio.push_back(false);
+    }
+    if(!filtros.anio_c.empty()){
+        if(filtros.bAnio_c)
+            peticion += " AND r.year = ?";
+        else
+            peticion += " AND r.year != ?";
+        valores.push_back(filtros.anio_c);
+        esAnio.push_back(true);
+    }
+
+    sqlite3_stmt* stmt = nullptr;
+    if (sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        return resultado;
+    }
+
+    for (size_t i = 0; i < valores.size(); ++i) {
+        int indiceParametro = i + 1;
+
+        if (esAnio[i])
+            sqlite3_bind_int(stmt, indiceParametro, std::stoi(valores[i]));
+        else
+            sqlite3_bind_text(stmt, indiceParametro, valores[i].c_str(), -1, SQLITE_TRANSIENT);
+    }
+
+    while(sqlite3_step(stmt) == SQLITE_ROW){
+
+        const unsigned char* c_ruta = sqlite3_column_text(stmt, 0);
+        std::string ruta = c_ruta ? reinterpret_cast<const char*>(c_ruta) : "";
+
+        const unsigned char* c_titulo = sqlite3_column_text(stmt, 1);
+        std::string titulo = c_titulo ? reinterpret_cast<const char*>(c_titulo) : "";
+
+        int track = sqlite3_column_int(stmt, 2);
+        int anio = sqlite3_column_int(stmt, 3);
+
+        const unsigned char* c_genero = sqlite3_column_text(stmt, 4);
+        std::string genero = c_genero ? reinterpret_cast<const char*>(c_genero) : "";
+
+        const unsigned char* c_portada = sqlite3_column_text(stmt, 5);
+        std::string portada = c_portada ? reinterpret_cast<const char*>(c_portada) : "";
+
+        const unsigned char* c_artista = sqlite3_column_text(stmt, 6);
+        std::string artista = c_artista ? reinterpret_cast<const char*>(c_artista) : "Unknown";
+
+        const unsigned char* c_album = sqlite3_column_text(stmt, 7);
+        std::string album = c_album ? reinterpret_cast<const char*>(c_album) : "Unknown";
+
+        int id = sqlite3_column_int(stmt, 8);
+        int id_album = sqlite3_column_int(stmt, 9);
+        int id_performer = sqlite3_column_int(stmt, 10);
+
+        Cancion c(ruta,titulo,artista,genero,album,track,anio,portada);
+        c.setId(id);
+        c.setIdAlbum(id_album);
+        c.setIdPerformer(id_performer);
+
+        resultado.push_back(c);
+    }
+    sqlite3_finalize(stmt);
+    return resultado;
+}
+
+std::vector<Performer> CancionesDAO::buscarPerformersFiltros(const TraductorBusquedas& filtros){
+    vector<Performer> performers;
+    std::string peticion = "SELECT id_performer, id_type, name, portada FROM performers "
+                           "WHERE 1=1";
+
+    if(filtros.personas == 1 && filtros.bPersonas){
+        if(filtros.grupos == 1 && filtros.bGrupos)
+            peticion += " AND id_type IN (0, 1)";
+        else
+            peticion += " AND id_type = 0";
+    }else{
+        if(filtros.grupos == 1 && filtros.bGrupos)
+            peticion += " AND id_type = 1";
+    }
+
+    if(filtros.personas == 1 && !filtros.bPersonas){
+        if(filtros.grupos == 1 && !filtros.bGrupos)
+            peticion += " AND id_type NOT IN (0, 1)";
+        else
+            peticion += " AND id_type != 0";
+    }else{
+        if(filtros.grupos == 1 && !filtros.bGrupos)
+            peticion += " AND id_type != 1";
+    }
+
+    std::string valor;
+
+    if(!filtros.performer.empty()){
+        if(filtros.bPerformer)
+            peticion += " AND name LIKE ?";
+        else
+            peticion += " AND name NOT LIKE ?";
+         valor = "%"+filtros.performer+"%";
+    }
+
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return performers;
+
+    if(!valor.empty())
+        sqlite3_bind_text(stmtSelect, 1, valor.c_str(), -1, SQLITE_TRANSIENT);
+
+    while(sqlite3_step(stmtSelect) == SQLITE_ROW){
+
+        int id = sqlite3_column_int(stmtSelect, 0);
+        int id_type = sqlite3_column_int(stmtSelect, 1);
+
+        const unsigned char* c_nombre = sqlite3_column_text(stmtSelect, 2);
+        std::string nombre = c_nombre ? reinterpret_cast<const char*>(c_nombre) : "";
+
+        const unsigned char* c_portada = sqlite3_column_text(stmtSelect, 3);
+        std::string portada = c_portada ? reinterpret_cast<const char*>(c_portada) : "";
+
+        Performer per(id, id_type, nombre, portada, true);
+
+        performers.push_back(per);
+    }
+    sqlite3_finalize(stmtSelect);
+    return performers;
+}
+
+std::vector<Album> CancionesDAO::buscarAlbumsFiltros(const TraductorBusquedas& filtros){
+    vector<Album> albums;
+    std::string peticion = "SELECT id_album, path, name, year, portada FROM albums WHERE 1=1";
+
+    std::string nombre_Album;
+    bool hayAnio = false;
+    bool hayNombre = false;
+    int argumentos =1;
+
+    if(!filtros.album.empty()){
+        if(filtros.bAlbum)
+            peticion += " AND name LIKE ?";
+        else
+            peticion += " AND name NOT LIKE ?";
+        nombre_Album = "%" + filtros.album + "%";
+        hayNombre = true;
+    }
+
+    if(!filtros.anio_a.empty()){
+        if(filtros.bAnio_a)
+            peticion += " AND year = ?";
+        else
+            peticion += " AND year != ?";
+        hayAnio = true;
+    }
+
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return albums;
+
+    if (hayNombre){
+        sqlite3_bind_text(stmtSelect, argumentos, nombre_Album.c_str(), -1, SQLITE_TRANSIENT);
+        argumentos ++;
+    }
+
+    if(hayAnio){
+        sqlite3_bind_int(stmtSelect, argumentos, std::stoi(filtros.anio_a));
+        argumentos++;
+    }
+
+    while(sqlite3_step(stmtSelect) == SQLITE_ROW){
+
+        int id = sqlite3_column_int(stmtSelect, 0);
+
+        const unsigned char* c_ruta = sqlite3_column_text(stmtSelect, 1);
+        std::string ruta = c_ruta ? reinterpret_cast<const char*>(c_ruta) : "";
+
+        const unsigned char* c_nombre = sqlite3_column_text(stmtSelect, 2);
+        std::string nombre = c_nombre ? reinterpret_cast<const char*>(c_nombre) : "";
+
+        int anio = sqlite3_column_int(stmtSelect, 3);
+
+        const unsigned char* c_portada = sqlite3_column_text(stmtSelect, 4);
+        std::string portada = c_portada ? reinterpret_cast<const char*>(c_portada) : "";
+
+        Album alb(id,ruta,nombre,portada,anio,true);
+
+        albums.push_back(alb);
+    }
+    sqlite3_finalize(stmtSelect);
+    return albums;
 }

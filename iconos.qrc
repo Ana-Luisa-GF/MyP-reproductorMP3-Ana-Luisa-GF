@@ -17,5 +17,6 @@
         <file>iconos/artista_base.png</file>
         <file>iconos/performer.png</file>
         <file>iconos/grupo.png</file>
+        <file>iconos/ayuda.png</file>
     </qresource>
 </RCC>
