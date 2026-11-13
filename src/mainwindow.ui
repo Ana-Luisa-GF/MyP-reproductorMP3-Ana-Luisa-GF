@@ -31,7 +31,7 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QListWidget" name="listWidget">
@@ -1134,6 +1134,46 @@ QPushButton:pressed {
       </widget>
      </widget>
     </widget>
+    <widget class="QWidget" name="page_7">
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>1081</width>
+        <height>581</height>
+       </rect>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LayoutDirection::LeftToRight</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>1065</width>
+         <height>2479</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt; font-weight:700; color:#3584e4;&quot;&gt;Guía para realizar Búsquedas.&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Utilice la barra de búsqueda para filtrar los elementos separando cada criterio con una coma (,). Cada campo no numérico busca de manera predeterminada que el valor en la base de datos contenga el texto ingresado (es decir, busca una coincidencia parcial), no es necesario que sea una coincidencia exacta.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;La estructura general es &lt;span style=&quot; font-weight:700;&quot;&gt;campo: &amp;lt;valor&amp;gt;&lt;/span&gt; para incluir o &lt;span style=&quot; font-weight:700;&quot;&gt;-campo: &amp;lt;valor&amp;gt;&lt;/span&gt; para excluir.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#1a5fb4;&quot;&gt;Comportamiento general y reglas de los campos:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Coincidencia por contenido&lt;/span&gt;: Los filtros de texto buscan registros cuyo valor contenga la subcadena proporcionada (por ejemplo, buscar performer: DANA encontrará resultados como &amp;quot;DANA&amp;quot;, &amp;quot;DANA y los Leones&amp;quot;, &amp;quot;Voz de DANA&amp;quot;, entre otros).&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Afectación global:&lt;/span&gt; Toda búsqueda se aplica simultáneamente a las tres vistas del reproductor (Canciones, Álbumes y Performers). Si un campo no pertenece a una vista específica, lo ignora, y solo aplica los filtros que le correspondan.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;Repetición de campos (Modo inclusivo o excluyente&lt;/span&gt;): Si se repite un mismo campo varias veces [independientemente de que se use en su forma normal o en su variante excluyente (-)] el sistema aplicará únicamente la última aparición de ese campo, ignorando las repeticiones anteriores.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#1a5fb4;&quot;&gt;Campos disponibles por vista:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Vista Canciones:&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;• performer: / -performer: (Filtra por el performer de la canción)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;• canción: / -canción: (Filtra por el título de la canción)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;• añoCancion: / -añoCancion: (Filtra por el año de lanzamiento de la canción)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;• genero: / -genero: (Filtra por género musical)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;• album: / -album: (Filtra por el álbum al que pertenece)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Vista Álbumes:&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;• album: / -album: (Filtra por el nombre del álbum)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;• añoAlbum: / -añoAlbum: (Filtra por el año del álbum)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Vista Performers:&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;• performer: / -performer: (Filtra por el nombre del intérprete)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;• grupos / -grupos (Filtro booleano sin valor: muestra únicamente grupos o los excluye)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;• personas / -personas (Filtro booleano sin valor: muestra únicamente personas/solistas o los excluye)&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt; color:#1a5fb4;&quot;&gt;Ejemplo de búsqueda:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Si se introduce la siguiente cadena de búsqueda: &amp;quot;performer: DANA, -genero: rock, album: gatos, -añoCancion: 2000, añoAlbum: 2010, -grupos, personas&amp;quot;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;En la vista Canciones:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Se mostrarán las canciones cuyo intérprete contenga &amp;quot;DANA&amp;quot;, cuyo género no contenga &amp;quot;rock&amp;quot;, cuyo álbum contenga &amp;quot;gatos&amp;quot;, y que no sean del año 2000.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;En la vista Álbumes:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Se mostrarán los álbumes cuyo nombre contenga &amp;quot;gatos&amp;quot; y que sean del año 2010.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; text-decoration: underline;&quot;&gt;En la vista Performers:&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Se mostrarán los intérpretes cuyo nombre contenga &amp;quot;DANA&amp;quot;, que no soean clasificados como grupos y que sí sean personas.&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Nota: Para volver a ver todas las canciones se puede presioner el boton &amp;quot;Reset&amp;quot; o realizar una busqueda vacía.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="wordWrap">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -1187,6 +1227,7 @@ QPushButton:pressed {
    <addaction name="actionMusica"/>
    <addaction name="actionAlbums"/>
    <addaction name="actionPerformers"/>
+   <addaction name="actionRestablecer"/>
    <addaction name="actionayuda"/>
   </widget>
   <action name="actionMinar">
@@ -1250,6 +1291,15 @@ QPushButton:pressed {
    </property>
    <property name="text">
     <string>ayuda</string>
+   </property>
+  </action>
+  <action name="actionRestablecer">
+   <property name="icon">
+    <iconset resource="../iconos.qrc">
+     <normaloff>:/iconos/reset.png</normaloff>:/iconos/reset.png</iconset>
+   </property>
+   <property name="text">
+    <string>Restablecer</string>
    </property>
   </action>
  </widget>

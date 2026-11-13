@@ -18,5 +18,6 @@
         <file>iconos/performer.png</file>
         <file>iconos/grupo.png</file>
         <file>iconos/ayuda.png</file>
+        <file>iconos/reset.png</file>
     </qresource>
 </RCC>

@@ -71,6 +71,10 @@ private slots:
 
     void on_actionAgregar_GRupo_triggered();
 
+    void on_actionRestablecer_triggered();
+
+    void on_actionayuda_triggered();
+
 private:
     Ui::MainWindow *ui;
     RepControlador *controlador;

@@ -21,7 +21,7 @@ MainWindow::MainWindow(RepControlador *ctrl, QWidget *parent)
 
     barraBusqueda = new QLineEdit(this);
     barraBusqueda->setPlaceholderText("Buscar...");
-    barraBusqueda->setFixedSize(675, 35);
+    barraBusqueda->setFixedSize(650, 35);
     barraBusqueda->setStyleSheet(
         "QLineEdit {"
         "   font-size: 14px;"
@@ -750,3 +750,14 @@ void MainWindow::ejecutarBusqueda(const QString &texto) {
 void MainWindow::busquedaInvalida(){
     QMessageBox::critical(this,"Error de busqueda","Los argumentos de la busqueda no son correctos.");
 }
+void MainWindow::on_actionRestablecer_triggered()
+{
+    ejecutarBusqueda("");
+}
+
+
+void MainWindow::on_actionayuda_triggered()
+{
+    ui->stackedWidget->setCurrentIndex(3);
+}
+
