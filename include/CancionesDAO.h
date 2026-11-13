@@ -43,9 +43,14 @@ public:
     int agregarPerson(const std::string &nombre);
     bool modificarColumna_person(const int &id, const std::string &columna,const std::string &nuevoValor);
     Person getPerson(const std::string &nombre);
+    std::vector<Person> getPersons();
 
     int agregarGrupo(const std::string &nombre);
     bool modificarColumna_goup(const int &id, const std::string &columna,const std::string &nuevoValor);
+    std::vector<Person> getPersonasGrupo(const int &idGrupo);
     Group getGroup(const std::string &nombre);
+
+    bool agregarPersonAGrupo(const int &id_person, const int &id_group);
+    bool eliminarPersonDeGrupo(const int &id_person, const int &id_group);
 };
 #endif

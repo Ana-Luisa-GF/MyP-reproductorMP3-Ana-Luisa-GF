@@ -295,6 +295,7 @@ std::vector<Cancion> CancionesDAO::getCanciones(){
         Cancion c(ruta,titulo,artista,genero,album,track,anio,portada);
         c.setId(id);
         c.setIdAlbum(id_album);
+        c.setIdPerformer(id_performer);
 
         rolas.push_back(c);
     }
@@ -425,12 +426,12 @@ Performer CancionesDAO::getPerofrmer(const int &id){
     if(sqlite3_step(stmtSelect) == SQLITE_ROW){
         int id = sqlite3_column_int(stmtSelect, 0);
 
-        int id_type = sqlite3_column_int(stmtSelect, 0);
+        int id_type = sqlite3_column_int(stmtSelect, 1);
 
         const unsigned char* namePtr = sqlite3_column_text(stmtSelect, 2);
         std::string nombre = namePtr ? reinterpret_cast<const char*>(namePtr) : "";
 
-        const unsigned char* portadaPtr = sqlite3_column_text(stmtSelect, 4);
+        const unsigned char* portadaPtr = sqlite3_column_text(stmtSelect, 3);
         std::string portada = portadaPtr ? reinterpret_cast<const char*>(portadaPtr) : "";
 
         sqlite3_finalize(stmtSelect);
@@ -664,8 +665,115 @@ Group CancionesDAO::getGroup(const std::string &nombre){
         std::string end_date = end_datePtr ? reinterpret_cast<const char*>(end_datePtr) : "";
 
         sqlite3_finalize(stmtSelect);
-        return Group(id_group,name,start_date,end_date,true);
+
+        Group g(id_group,name,start_date,end_date,true);
+        g.setIntegrantes(getPersonasGrupo(grupo.id));
+        return g;
     }
     sqlite3_finalize(stmtSelect);
+
     return grupo;
+}
+
+bool CancionesDAO::agregarPersonAGrupo(const int &id_person, const int &id_group) {
+    std::string peticion = "INSERT OR IGNORE INTO in_group (id_person, id_group) VALUES (?, ?);";
+    sqlite3_stmt* stmt = nullptr;
+    if (sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
+        return false;
+
+    sqlite3_bind_int(stmt, 1, id_person);
+    sqlite3_bind_int(stmt, 2, id_group);
+
+    bool exito = (sqlite3_step(stmt) == SQLITE_DONE);
+    sqlite3_finalize(stmt);
+
+    return exito;
+}
+
+std::vector<Person> CancionesDAO::getPersonasGrupo(const int &idGrupo) {
+    std::vector<Person> personasDelGrupo;
+
+    std::string peticion = "SELECT p.id_person, p.stage_name, p.real_name, p.birth_date, p.death_date "
+                           "FROM persons p "
+                           "JOIN in_group ig ON p.id_person = ig.id_person "
+                           "JOIN groups g ON ig.id_group = g.id_group "
+                           "WHERE g.id_group = ?";
+
+    sqlite3_stmt* stmt = nullptr;
+    if (sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmt, nullptr) != SQLITE_OK) {
+        return personasDelGrupo;
+    }
+
+    sqlite3_bind_int(stmt, 1, idGrupo);
+
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int id_person = sqlite3_column_int(stmt, 0);
+
+        const unsigned char* stage_namePtr = sqlite3_column_text(stmt, 1);
+        std::string stage_name = stage_namePtr ? reinterpret_cast<const char*>(stage_namePtr) : "";
+
+        const unsigned char* real_namePtr = sqlite3_column_text(stmt, 2);
+        std::string real_name = real_namePtr ? reinterpret_cast<const char*>(real_namePtr) : "";
+
+        const unsigned char* birth_datePtr = sqlite3_column_text(stmt, 3);
+        std::string birth_date = birth_datePtr ? reinterpret_cast<const char*>(birth_datePtr) : "";
+
+        const unsigned char* death_datePtr = sqlite3_column_text(stmt, 4);
+        std::string death_date = death_datePtr ? reinterpret_cast<const char*>(death_datePtr) : "";
+
+        personasDelGrupo.push_back(Person(id_person, stage_name, real_name, birth_date, death_date, true));
+    }
+
+    sqlite3_finalize(stmt);
+    return personasDelGrupo;
+}
+
+
+bool CancionesDAO::eliminarPersonDeGrupo(const int &id_person, const int &id_group) {
+    std::string peticion = "DELETE FROM in_group WHERE id_person = ? AND id_group = ?;";
+    sqlite3_stmt* stmt = nullptr;
+
+    if (sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmt, nullptr) != SQLITE_OK)
+        return false;
+
+    sqlite3_bind_int(stmt, 1, id_person);
+    sqlite3_bind_int(stmt, 2, id_group);
+
+    bool exito = (sqlite3_step(stmt) == SQLITE_DONE);
+
+    sqlite3_finalize(stmt);
+    return exito;
+}
+
+std::vector<Person> CancionesDAO::getPersons(){
+    vector<Person> artistas;
+    std::string peticion = "SELECT id_person, stage_name, real_name, birth_date, death_date FROM persons;";
+
+    sqlite3_stmt* stmtSelect = nullptr;
+    if(sqlite3_prepare_v2(baseDeDatos, peticion.c_str(), -1, &stmtSelect, nullptr) != SQLITE_OK)
+        return artistas;
+
+
+    while(sqlite3_step(stmtSelect) == SQLITE_ROW){
+
+        int id_perso = sqlite3_column_int(stmtSelect, 0);
+
+        const unsigned char* c_stage_name = sqlite3_column_text(stmtSelect, 1);
+        std::string stage_name = c_stage_name ? reinterpret_cast<const char*>(c_stage_name) : "";
+
+        const unsigned char* c_real_name = sqlite3_column_text(stmtSelect, 2);
+        std::string real_name = c_real_name ? reinterpret_cast<const char*>(c_real_name) : "";
+
+        const unsigned char* c_birth_date = sqlite3_column_text(stmtSelect, 3);
+        std::string birth_date = c_birth_date ? reinterpret_cast<const char*>(c_birth_date) : "";
+
+        const unsigned char* c_death_date = sqlite3_column_text(stmtSelect, 4);
+        std::string death_date = c_death_date ? reinterpret_cast<const char*>(c_death_date) : "";
+
+        Person artist(id_perso,stage_name,real_name,birth_date,death_date, true);
+
+        artistas.push_back(artist);
+    }
+    sqlite3_finalize(stmtSelect);
+    return artistas;
 }

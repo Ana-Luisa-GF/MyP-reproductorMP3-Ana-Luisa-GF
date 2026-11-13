@@ -17,6 +17,7 @@ public:
               const std::string& death_date, const bool &person_valida){
         this->id = id;
         this->stage_name = stage_name;
+        this->real_name = real_name;
         this->birth_date = birth_date;
         this->death_date = death_date;
         this->person_valida=person_valida;

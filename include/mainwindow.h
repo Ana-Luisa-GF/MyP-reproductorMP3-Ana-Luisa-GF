@@ -28,7 +28,6 @@ public:
     void modificarAlbum(const int &boton);
     void performerClickeado(const Performer& performer);
     void diseñoVentanaPerformer(const int &tipo_performer);
-    void cambiarDatosPerformer();
 
     void refrescar();
 
@@ -68,6 +67,12 @@ private slots:
     void on_actionPerformers_triggered();
 
     void on_editButton_performer_clicked();
+
+    void on_editButton_person_clicked();
+
+    void on_editButton_grupo_clicked();
+
+    void on_editButton_integrantes_grupo_clicked();
 
 private:
     Ui::MainWindow *ui;

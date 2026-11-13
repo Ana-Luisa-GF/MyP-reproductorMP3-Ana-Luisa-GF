@@ -53,10 +53,17 @@ Performer RepControlador::getPerformer(const int &id){
     return dao.getPerofrmer(id);
 }
 
+std::vector<Person> RepControlador::getPersonasGrupo(const int &idGrupo){
+    return dao.getPersonasGrupo(idGrupo);
+}
+
 std::vector<Performer> RepControlador::getPerformers(){
     return dao.getPerformers();
 }
 
+bool RepControlador::modificarColumna_performer(const int &id, const std::string &columna,const int &id_type, const std::string &nombre){
+    return dao.modificarColumna_performer(id,columna,id_type,nombre);
+}
 
 int RepControlador::agregarPerson(const std::string &nombre){
     return dao.agregarPerson(nombre);
@@ -66,6 +73,10 @@ bool RepControlador::modificarColumna_person(const int &id, const std::string &c
 }
 Person RepControlador::getPerson(const std::string &nombre){
     return dao.getPerson(nombre);
+}
+
+std::vector<Person> RepControlador::getPersons(){
+    return dao.getPersons();
 }
 
 int RepControlador::agregarGrupo(const std::string &nombre){
@@ -82,4 +93,11 @@ Group RepControlador::getGroup(const std::string &nombre){
 
 bool RepControlador::definirTipoPerformer(const int &id, const int &nuevoTipo){
     return dao.modificarColumna_performer(id,"id_type",nuevoTipo,"");
+}
+
+bool RepControlador::agregarPersonAGrupo(const int &id_person, const int &id_group){
+    return dao.agregarPersonAGrupo(id_person,id_group);
+}
+bool RepControlador::eliminarPersonDeGrupo(const int &id_person, const int &id_group){
+    return dao.eliminarPersonDeGrupo(id_person,id_group);
 }

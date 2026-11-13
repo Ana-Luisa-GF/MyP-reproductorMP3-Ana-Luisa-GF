@@ -29,15 +29,21 @@ public:
 
     Performer getPerformer(const int &id);
     std::vector<Performer> getPerformers();
+    bool modificarColumna_performer(const int &id, const std::string &columna,const int &id_type, const std::string &nombre);
     bool definirTipoPerformer(const int &id, const int &nuevoTipo);
 
     int agregarPerson(const std::string &nombre);
     bool modificarColumna_person(const int &id, const std::string &columna,const std::string &nuevoValor);
     Person getPerson(const std::string &nombre);
+    std::vector<Person> getPersons();
 
     int agregarGrupo(const std::string &nombre);
     bool modificarColumna_goup(const int &id, const std::string &columna,const std::string &nuevoValor);
     Group getGroup(const std::string &nombre);
+
+    bool agregarPersonAGrupo(const int &id_person, const int &id_group);
+    bool eliminarPersonDeGrupo(const int &id_person, const int &id_group);
+    std::vector<Person> getPersonasGrupo(const int &idGrupo);
 };
 #endif
 

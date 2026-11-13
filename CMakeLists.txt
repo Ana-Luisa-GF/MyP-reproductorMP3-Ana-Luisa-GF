@@ -42,10 +42,19 @@ add_executable(Reproductor
     ${PROJECT_SOURCE_DIR}/src/cambiarperformer.ui
     ${PROJECT_SOURCE_DIR}/include/cambiarperformer.h
     ${PROJECT_SOURCE_DIR}/include/Album.h
-    include/Performer.h
-    include/Person.h
-    include/Person.h
-    include/Group.h
+    ${PROJECT_SOURCE_DIR}/include/Performer.h
+    ${PROJECT_SOURCE_DIR}/include/Person.h
+    ${PROJECT_SOURCE_DIR}/include/Person.h
+    ${PROJECT_SOURCE_DIR}/include/Group.h
+    ${PROJECT_SOURCE_DIR}/include/cambiarperson.h
+    ${PROJECT_SOURCE_DIR}/src/cambiarperson.cpp
+    ${PROJECT_SOURCE_DIR}/src/cambiarperson.ui
+    ${PROJECT_SOURCE_DIR}/include/cambiargroup.h
+    ${PROJECT_SOURCE_DIR}/src/cambiargroup.cpp
+    ${PROJECT_SOURCE_DIR}/src/cambiargroup.ui
+    ${PROJECT_SOURCE_DIR}/include/grupointegrantes.h
+    ${PROJECT_SOURCE_DIR}/src/grupointegrantes.cpp
+    ${PROJECT_SOURCE_DIR}/src/grupointegrantes.ui
 )
 
 target_include_directories(Reproductor PRIVATE

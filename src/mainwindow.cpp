@@ -5,6 +5,9 @@
 #include "cambiartitulo.h"
 #include "cambiaralbum.h"
 #include "cambiarperformer.h"
+#include "cambiarperson.h"
+#include "cambiargroup.h"
+#include "grupointegrantes.h"
 #include <iostream>
 #include <QMessageBox>
 #include <QDate>
@@ -190,13 +193,18 @@ void MainWindow::on_editButton_titulo_clicked()
 
 void MainWindow::on_editButton_artista_clicked()
 {
-    QString mensaje="";
-    if(!cancion_selec.ruta.empty())
-        mensaje =  QString::fromStdString(cancion_selec.album);
+    performer_selec = controlador->getPerformer(cancion_selec.id_performer);
+    if(performer_selec.id_type == 0){
+        on_editButton_person_clicked();
+        return;
+    }
 
-    CambiarTitulo ventana_titulo("Album de la canción",mensaje);
-    ventana_titulo.setModal(true);
-    ventana_titulo.exec();
+    if(performer_selec.id_type == 2){
+        on_editButton_performer_clicked();
+        return;
+    }
+
+    on_editButton_grupo_clicked();
 }
 
 void MainWindow::modificarAlbum(const int &boton){
@@ -426,8 +434,8 @@ void MainWindow::performerClickeado(const Performer& performer){
 
     } else {
         QPixmap pixmapDefault;
-        if(performer.id == 0)
-            pixmapDefault.load(":/iconos/artista_base.png");   //NO FUNCIONAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+        if(performer.id_type == 0)
+            pixmapDefault.load(":/iconos/artista_base.png");
         else
             if(performer.id_type == 1)
                 pixmapDefault.load(":/iconos/grupo.png");
@@ -460,6 +468,9 @@ void MainWindow::diseñoVentanaPerformer(const int &tipo_performer){
         if(tipo_performer == 0){
 
             artista_selec = controlador->getPerson(performer_selec.nombre);
+
+            qDebug() << "Artista encontrado ID:" << artista_selec.id << "Nombre art:" << artista_selec.stage_name.c_str();
+
             ui->stackedWidget_performer->setCurrentIndex(1);
             int anchoDisponible = 261 - 75;
 
@@ -542,7 +553,8 @@ void MainWindow::diseñoVentanaPerformer(const int &tipo_performer){
 
 }
 
-void  MainWindow::cambiarDatosPerformer(){
+void MainWindow::on_editButton_performer_clicked()
+{
     cambiarPerformer ventana;
     ventana.setModal(true);
     if(ventana.exec() == QDialog::Accepted && performer_selec.performer_valido){
@@ -559,8 +571,83 @@ void  MainWindow::cambiarDatosPerformer(){
     }
 }
 
-void MainWindow::on_editButton_performer_clicked()
+
+void MainWindow::on_editButton_person_clicked()
 {
-    cambiarDatosPerformer();
+    cambiarPerson ventana(QString::fromStdString(artista_selec.stage_name),QString::fromStdString(artista_selec.real_name),
+                          QString::fromStdString(artista_selec.birth_date),QString::fromStdString(artista_selec.death_date));
+    ventana.setModal(true);
+    if(ventana.exec() == QDialog::Accepted){
+        if(!controlador->modificarColumna_person(artista_selec.id,"stage_name",ventana.getNombreArt().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        if(!controlador->modificarColumna_performer(performer_selec.id,"name",0,ventana.getNombreArt().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        if(!controlador->modificarColumna_person(artista_selec.id,"real_name",ventana.getNombreReal().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        if(!controlador->modificarColumna_person(artista_selec.id,"birth_date",ventana.getFechaCumple().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        if(ventana.existFechaMuerte())
+            if(!controlador->modificarColumna_person(artista_selec.id,"death_date",ventana.getFechaMuerte().toStdString()))
+                QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        performer_selec = controlador->getPerformer(performer_selec.id);
+        performerClickeado(performer_selec);
+        refrescar();
+    }
 }
 
+
+
+void MainWindow::on_editButton_grupo_clicked()
+{
+    CambiarGroup ventana(QString::fromStdString(grupo_selec.name),QString::fromStdString(grupo_selec.start_date),
+                         QString::fromStdString(grupo_selec.end_date));
+    ventana.setModal(true);
+    if(ventana.exec() == QDialog::Accepted){
+        if(!controlador->modificarColumna_goup(grupo_selec.id,"name",ventana.getNombre().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        if(!controlador->modificarColumna_performer(performer_selec.id,"name",0,ventana.getNombre().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        if(!controlador->modificarColumna_goup(grupo_selec.id,"start_date",ventana.getFechaCreacion().toStdString()))
+            QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        if(ventana.existFechaDisolucion())
+            if(!controlador->modificarColumna_goup(grupo_selec.id,"end_date",ventana.getFechaDisolucion().toStdString()))
+                QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        performer_selec = controlador->getPerformer(performer_selec.id);
+        performerClickeado(performer_selec);
+        refrescar();
+    }
+}
+
+
+
+
+void MainWindow::on_editButton_integrantes_grupo_clicked()
+{
+    grupo_selec = controlador->getGroup(performer_selec.nombre);
+    std::vector<Person> artistas = controlador->getPersons();
+    std::vector<Performer> integrantes;
+
+    for(const Person &artist : controlador->getPersonasGrupo(grupo_selec.id))
+        for(const Performer &performer : controlador->getPerformers())
+            if(artist.stage_name == performer.nombre && performer.id_type == 0)
+                integrantes.push_back(performer);
+
+    GrupoIntegrantes ventana(artistas,integrantes);
+    ventana.setModal(true);
+    if(ventana.exec() == QDialog::Accepted){
+        if(!ventana.getAccion()){
+            if(ventana.getNuevoArtista())
+                return;
+            else
+                if(!controlador->eliminarPersonDeGrupo(ventana.getIdArtista(),grupo_selec.id))
+                    QMessageBox::critical(this, "Error", "Algo salio mal al comunicarse con la base de datos.");
+        }else{
+            if(ventana.getNuevoArtista())
+                refrescar();
+            else
+                if(!controlador->agregarPersonAGrupo(ventana.getIdArtista(), grupo_selec.id))
+                QMessageBox::critical(this,"Error","Algo salio mal al comunicarse con la base de datos.");
+        }
+        refrescar();
+    }
+}
