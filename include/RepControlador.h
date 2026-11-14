@@ -6,10 +6,12 @@
 #include "Performer.h"
 #include "Group.h"
 #include "TraductorBusquedas.h"
+#include "ReproductorAudio.h"
 
 class MainWindow;
 class RepControlador{
 
+    ReproductorAudio &repAudio;
     TraductorBusquedas &trad;
     Minero& minero;
     CancionesDAO& dao;
@@ -18,7 +20,7 @@ class RepControlador{
 
 public:
     void setVista(MainWindow* w);
-    RepControlador(Minero& m, CancionesDAO& daoRef, TraductorBusquedas &tr);
+    RepControlador(Minero& m, CancionesDAO& daoRef, TraductorBusquedas &tr, ReproductorAudio &repA);
 
     void minar(std::string ruta);
     std::vector<Cancion> getCanciones();
@@ -51,6 +53,10 @@ public:
     std::vector<Person> getPersonasGrupo(const int &idGrupo);
 
     void busqueda(const std::string &busqueda);
+
+    void pasarCancion(QString ruta_cancion);
+    void play();
+    void pause();
 };
 #endif
 

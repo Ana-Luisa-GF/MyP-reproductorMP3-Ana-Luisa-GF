@@ -143,6 +143,8 @@ void MainWindow::cancionClickeada(const Cancion& cancion)
     std::string texto4 = texto3+std::to_string(cancion.track)+"</span>";
     ui->caja_track->setText(texto4.c_str());
 
+    QString ruta = QString::fromUtf8(cancion_selec.ruta.c_str());
+    controlador->pasarCancion(ruta);
 }
 
 void MainWindow::setListas(std::vector<Cancion> r, std::vector<Album> a, std::vector<Performer> p){
@@ -759,5 +761,14 @@ void MainWindow::on_actionRestablecer_triggered()
 void MainWindow::on_actionayuda_triggered()
 {
     ui->stackedWidget->setCurrentIndex(3);
+}
+
+
+void MainWindow::on_botonPlay_clicked(bool checked)
+{
+    if(checked)
+         controlador->play();
+    else
+       controlador->pause();
 }
 

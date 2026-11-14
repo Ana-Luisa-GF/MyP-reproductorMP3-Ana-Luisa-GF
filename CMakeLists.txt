@@ -8,6 +8,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
+find_package(Qt6 REQUIRED COMPONENTS Widgets Multimedia)
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(TAGLIB REQUIRED taglib)
@@ -57,6 +58,8 @@ add_executable(Reproductor
     ${PROJECT_SOURCE_DIR}/src/grupointegrantes.ui
     ${PROJECT_SOURCE_DIR}/include/TraductorBusquedas.h
     ${PROJECT_SOURCE_DIR}/src/TraductorBusquedas.cpp
+    ${PROJECT_SOURCE_DIR}/include/ReproductorAudio.h
+    ${PROJECT_SOURCE_DIR}/src/ReproductorAudio.cpp
 )
 
 target_include_directories(Reproductor PRIVATE
@@ -66,7 +69,7 @@ target_include_directories(Reproductor PRIVATE
 
 target_link_libraries(Reproductor PRIVATE
     Qt6::Widgets
-
+    Qt6::Multimedia
     SQLite3::SQLite3
     ${TAGLIB_LIBRARIES}
 )

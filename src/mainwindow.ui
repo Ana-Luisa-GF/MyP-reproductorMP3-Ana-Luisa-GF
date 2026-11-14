@@ -86,8 +86,8 @@ ui-&gt;label-&gt;setStyleSheet(&quot;background-color: yellow;&quot;);</string>
         <rect>
          <x>120</x>
          <y>170</y>
-         <width>70</width>
-         <height>70</height>
+         <width>71</width>
+         <height>71</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -178,7 +178,7 @@ QPushButton:pressed {
        <property name="geometry">
         <rect>
          <x>200</x>
-         <y>182</y>
+         <y>180</y>
          <width>51</width>
          <height>51</height>
         </rect>

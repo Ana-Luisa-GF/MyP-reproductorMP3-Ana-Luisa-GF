@@ -75,6 +75,8 @@ private slots:
 
     void on_actionayuda_triggered();
 
+    void on_botonPlay_clicked(bool checked);
+
 private:
     Ui::MainWindow *ui;
     RepControlador *controlador;

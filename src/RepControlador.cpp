@@ -2,10 +2,11 @@
 #include "Cancion.h"
 #include "mainwindow.h"
 
-RepControlador::RepControlador(Minero& m, CancionesDAO& daoRef,TraductorBusquedas &tr) :
+RepControlador::RepControlador(Minero& m, CancionesDAO& daoRef,TraductorBusquedas &tr, ReproductorAudio &repA) :
     minero(m),
     dao(daoRef),
     trad(tr),
+    repAudio(repA),
     vista(nullptr){}
 
 
@@ -124,4 +125,15 @@ void RepControlador::busqueda(const std::string &busqueda){
     vista->setListas(rolas, albums, performers);
     vista->setBusqueda_valida(true);
     vista->refrescar_busqueda();
+}
+
+
+void RepControlador::pasarCancion(QString ruta_cancion){
+    repAudio.asignarCancion(ruta_cancion);
+}
+void RepControlador::play(){
+    repAudio.repreoducirCancion();
+}
+void RepControlador::pause(){
+    repAudio.pararCancion();
 }
