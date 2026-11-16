@@ -20,46 +20,45 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 
 add_executable(Reproductor
     ${PROJECT_SOURCE_DIR}/src/main.cpp
-    ${PROJECT_SOURCE_DIR}/src/Minero.cpp
-    ${PROJECT_SOURCE_DIR}/include/Minero.h
-    ${PROJECT_SOURCE_DIR}/src/CancionesDAO.cpp
-    ${PROJECT_SOURCE_DIR}/include/CancionesDAO.h
-    ${PROJECT_SOURCE_DIR}/include/Cancion.h
-    ${PROJECT_SOURCE_DIR}/src/RepControlador.cpp
-    ${PROJECT_SOURCE_DIR}/include/RepControlador.h
-    ${PROJECT_SOURCE_DIR}/include/mainwindow.h
-    ${PROJECT_SOURCE_DIR}/src/mainwindow.cpp
-    ${PROJECT_SOURCE_DIR}/src/mainwindow.ui
+    ${PROJECT_SOURCE_DIR}/src/modelo/Minero.cpp
+    ${PROJECT_SOURCE_DIR}/include/modelo/Minero.h
+    ${PROJECT_SOURCE_DIR}/src/modelo/CancionesDAO.cpp
+    ${PROJECT_SOURCE_DIR}/include/modelo/CancionesDAO.h
+    ${PROJECT_SOURCE_DIR}/include/estructuras_compartidas/Cancion.h
+    ${PROJECT_SOURCE_DIR}/src/controlador/RepControlador.cpp
+    ${PROJECT_SOURCE_DIR}/include/controlador/RepControlador.h
+    ${PROJECT_SOURCE_DIR}/include/vista/mainwindow.h
+    ${PROJECT_SOURCE_DIR}/src/vista/mainwindow.cpp
+    ${PROJECT_SOURCE_DIR}/src/vista/mainwindow.ui
     ${PROJECT_SOURCE_DIR}/iconos.qrc
-    ${PROJECT_SOURCE_DIR}/include/TarjetaCancion.h
-    ${PROJECT_SOURCE_DIR}/src/TarjetaCancion.cpp
-    ${PROJECT_SOURCE_DIR}/src/cambiartitulo.cpp
-    ${PROJECT_SOURCE_DIR}/src/cambiartitulo.ui
-    ${PROJECT_SOURCE_DIR}/include/cambiartitulo.h
-    ${PROJECT_SOURCE_DIR}/src/cambiaralbum.cpp
-    ${PROJECT_SOURCE_DIR}/src/cambiaralbum.ui
-    ${PROJECT_SOURCE_DIR}/include/cambiaralbum.h
-    ${PROJECT_SOURCE_DIR}/src/cambiarperformer.cpp
-    ${PROJECT_SOURCE_DIR}/src/cambiarperformer.ui
-    ${PROJECT_SOURCE_DIR}/include/cambiarperformer.h
-    ${PROJECT_SOURCE_DIR}/include/Album.h
-    ${PROJECT_SOURCE_DIR}/include/Performer.h
-    ${PROJECT_SOURCE_DIR}/include/Person.h
-    ${PROJECT_SOURCE_DIR}/include/Person.h
-    ${PROJECT_SOURCE_DIR}/include/Group.h
-    ${PROJECT_SOURCE_DIR}/include/cambiarperson.h
-    ${PROJECT_SOURCE_DIR}/src/cambiarperson.cpp
-    ${PROJECT_SOURCE_DIR}/src/cambiarperson.ui
-    ${PROJECT_SOURCE_DIR}/include/cambiargroup.h
-    ${PROJECT_SOURCE_DIR}/src/cambiargroup.cpp
-    ${PROJECT_SOURCE_DIR}/src/cambiargroup.ui
-    ${PROJECT_SOURCE_DIR}/include/grupointegrantes.h
-    ${PROJECT_SOURCE_DIR}/src/grupointegrantes.cpp
-    ${PROJECT_SOURCE_DIR}/src/grupointegrantes.ui
-    ${PROJECT_SOURCE_DIR}/include/TraductorBusquedas.h
-    ${PROJECT_SOURCE_DIR}/src/TraductorBusquedas.cpp
-    ${PROJECT_SOURCE_DIR}/include/ReproductorAudio.h
-    ${PROJECT_SOURCE_DIR}/src/ReproductorAudio.cpp
+    ${PROJECT_SOURCE_DIR}/include/vista/TarjetaCancion.h
+    ${PROJECT_SOURCE_DIR}/src/vista/TarjetaCancion.cpp
+    ${PROJECT_SOURCE_DIR}/src/vista/cambiartitulo.cpp
+    ${PROJECT_SOURCE_DIR}/src/vista/cambiartitulo.ui
+    ${PROJECT_SOURCE_DIR}/include/vista/cambiartitulo.h
+    ${PROJECT_SOURCE_DIR}/src/vista/cambiaralbum.cpp
+    ${PROJECT_SOURCE_DIR}/src/vista/cambiaralbum.ui
+    ${PROJECT_SOURCE_DIR}/include/vista/cambiaralbum.h
+    ${PROJECT_SOURCE_DIR}/src/vista/cambiarperformer.cpp
+    ${PROJECT_SOURCE_DIR}/src/vista/cambiarperformer.ui
+    ${PROJECT_SOURCE_DIR}/include/vista/cambiarperformer.h
+    ${PROJECT_SOURCE_DIR}/include/estructuras_compartidas/Album.h
+    ${PROJECT_SOURCE_DIR}/include/estructuras_compartidas/Performer.h
+    ${PROJECT_SOURCE_DIR}/include/estructuras_compartidas/Person.h
+    ${PROJECT_SOURCE_DIR}/include/estructuras_compartidas/Group.h
+    ${PROJECT_SOURCE_DIR}/include/vista/cambiarperson.h
+    ${PROJECT_SOURCE_DIR}/src/vista/cambiarperson.cpp
+    ${PROJECT_SOURCE_DIR}/src/vista/cambiarperson.ui
+    ${PROJECT_SOURCE_DIR}/include/vista/cambiargroup.h
+    ${PROJECT_SOURCE_DIR}/src/vista/cambiargroup.cpp
+    ${PROJECT_SOURCE_DIR}/src/vista/cambiargroup.ui
+    ${PROJECT_SOURCE_DIR}/include/vista/grupointegrantes.h
+    ${PROJECT_SOURCE_DIR}/src/vista/grupointegrantes.cpp
+    ${PROJECT_SOURCE_DIR}/src/vista/grupointegrantes.ui
+    ${PROJECT_SOURCE_DIR}/include/modelo/TraductorBusquedas.h
+    ${PROJECT_SOURCE_DIR}/src/modelo/TraductorBusquedas.cpp
+    ${PROJECT_SOURCE_DIR}/include/modelo/ReproductorAudio.h
+    ${PROJECT_SOURCE_DIR}/src/modelo/ReproductorAudio.cpp
 )
 
 target_include_directories(Reproductor PRIVATE
@@ -81,8 +80,8 @@ target_compile_options(Reproductor PRIVATE ${TAGLIB_CFLAGS_OTHER})
 # Test CancionesDAO
 add_executable(test_CancionesDAO
     ${PROJECT_SOURCE_DIR}/test/test_CancionesDAO.cpp
-    ${PROJECT_SOURCE_DIR}/src/CancionesDAO.cpp
-    ${PROJECT_SOURCE_DIR}/include/Cancion.h
+    ${PROJECT_SOURCE_DIR}/src/modelo/CancionesDAO.cpp
+    ${PROJECT_SOURCE_DIR}/include/estructuras_compartidas/Cancion.h
 )
 file(COPY ${PROJECT_SOURCE_DIR}/rolas.sql DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
@@ -103,9 +102,9 @@ target_link_libraries(test_CancionesDAO PRIVATE
 # Test Minero
 add_executable(test_Minero
     ${PROJECT_SOURCE_DIR}/test/test_Minero.cpp
-    ${PROJECT_SOURCE_DIR}/src/Minero.cpp
-    ${PROJECT_SOURCE_DIR}/src/CancionesDAO.cpp
-    ${PROJECT_SOURCE_DIR}/include/Cancion.h
+    ${PROJECT_SOURCE_DIR}/src/modelo/Minero.cpp
+    ${PROJECT_SOURCE_DIR}/src/modelo/CancionesDAO.cpp
+    ${PROJECT_SOURCE_DIR}/include/estructuras_compartidas/Cancion.h
 )
 file(COPY ${PROJECT_SOURCE_DIR}/Musica_tests DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 

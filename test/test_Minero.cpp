@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
-#include "CancionesDAO.h"
-#include "Minero.h"
-#include "Cancion.h"
+#include "modelo/CancionesDAO.h"
+#include "modelo/Minero.h"
+#include "estructuras_compartidas/Cancion.h"
 
 namespace fileSys = std::filesystem;
 

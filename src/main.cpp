@@ -1,12 +1,12 @@
 #include <QApplication>
-#include "CancionesDAO.h"
-#include "Minero.h"
+#include "modelo/CancionesDAO.h"
+#include "modelo/Minero.h"
 #include <string>
 #include <iostream>
-#include "mainwindow.h"
-#include "RepControlador.h"
-#include "TraductorBusquedas.h"
-#include "ReproductorAudio.h"
+#include "vista/mainwindow.h"
+#include "controlador/RepControlador.h"
+#include "modelo/TraductorBusquedas.h"
+#include "modelo/ReproductorAudio.h"
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
@@ -18,11 +18,7 @@ int main(int argc, char* argv[]) {
     TraductorBusquedas trad;
     ReproductorAudio repAudio;
 
-
     RepControlador controlador(minero,cancionesDAO,trad,repAudio);
-
-    std::string ruta;
-    std::cout<<"El progrma hace las cosas hasta aqui"<<endl;
 
     MainWindow w(&controlador);
     controlador.setVista(&w);

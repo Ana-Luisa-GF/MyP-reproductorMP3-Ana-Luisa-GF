@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
-#include "CancionesDAO.h"
-#include "Cancion.h"
+#include "modelo/CancionesDAO.h"
+#include "estructuras_compartidas/Cancion.h"
 #include <vector>
 #include <string>
 #include <filesystem>
